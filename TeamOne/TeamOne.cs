@@ -1,4 +1,5 @@
-﻿using Common; //Common contains all the classes you need to play CloudBall.
+﻿using System;
+using Common; //Common contains all the classes you need to play CloudBall.
 
 namespace TeamOne
 {
@@ -12,7 +13,7 @@ namespace TeamOne
     {                                                
         public void Action(Team myTeam, Team enemyTeam, Ball ball, MatchInfo matchInfo)
         {
-            //Loop over all players in my team.
+            ////Loop over all players in my team.
             //foreach (Player player in myTeam.Players)
             //{
             //    //If this player has the ball.

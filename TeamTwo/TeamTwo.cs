@@ -27,8 +27,8 @@ namespace TeamTwo
                     player.ActionShootGoal();
                 else if (player.CanPickUpBall(ball))  //Picks up the ball if posible.
                     player.ActionPickUpBall();
-                else if (player.CanTackle(closestEnemy))  //Tackles any enemy that is close.
-                    player.ActionTackle(closestEnemy);
+                //else if (player.CanTackle(closestEnemy))  //Tackles any enemy that is close.
+                //    player.ActionTackle(closestEnemy);
                 else  //If the player cannot do anything urgently usefull, move to a good position.
                 {
                     if (player == ball.GetClosest(myTeam))  //If the player is closest to the ball, go for it.
