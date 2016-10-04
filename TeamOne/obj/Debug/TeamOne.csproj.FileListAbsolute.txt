@@ -9,3 +9,8 @@ C:\Git\RuneAnderbergT4\BitSoccer\TeamOne\bin\Debug\Common.dll
 C:\Git\RuneAnderbergT4\BitSoccer\TeamOne\obj\Debug\TeamOne.csprojResolveAssemblyReference.cache
 C:\Git\RuneAnderbergT4\BitSoccer\TeamOne\obj\Debug\TeamOne.dll
 C:\Git\RuneAnderbergT4\BitSoccer\TeamOne\obj\Debug\TeamOne.pdb
+D:\Git\RuneAnderbergT4\BitSoccer\TeamOne\bin\Debug\TeamOne.dll
+D:\Git\RuneAnderbergT4\BitSoccer\TeamOne\bin\Debug\TeamOne.pdb
+D:\Git\RuneAnderbergT4\BitSoccer\TeamOne\bin\Debug\Common.dll
+D:\Git\RuneAnderbergT4\BitSoccer\TeamOne\obj\Debug\TeamOne.dll
+D:\Git\RuneAnderbergT4\BitSoccer\TeamOne\obj\Debug\TeamOne.pdb

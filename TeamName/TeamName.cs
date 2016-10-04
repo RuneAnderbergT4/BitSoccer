@@ -10,19 +10,32 @@ namespace TeamName
     public class TeamName : ITeam
     {
         private static Team _lastTeam;
+
+        private static float _goalPostTop = Field.MyGoal.Top.Y;
+        private static float _goalPostBottom = Field.MyGoal.Bottom.Y;
+        private static float _goalKeeperMaxX = Field.MyGoal.Center.X + 50;
+
         public void Action(Team myTeam, Team enemyTeam, Ball ball, MatchInfo matchInfo)
         {
+            var vel = Common.Constants.PlayerMaxVelocity;
+            var bal = ball.Velocity;
+
+            var temp1 = Field.Borders.Height/2;
+
+            var temp = Field.Borders.Width / 2;
+
             if (ball.Owner != null)
             {
                 _lastTeam = ball.Owner.Team == myTeam ? myTeam : enemyTeam;
             }
-
+            
             foreach (Player player in myTeam.Players)
             {
                 Player closestEnemy = player.GetClosest(enemyTeam);
 
                 if (ball.Owner == player)
                 {
+
                     switch (player.PlayerType)
                     {
                         case PlayerType.Keeper:
@@ -98,7 +111,17 @@ namespace TeamName
                     else switch (player.PlayerType)
                     {
                         case PlayerType.Keeper:
-                            player.ActionGo(new Vector(50, Math.Max(Math.Min(ball.Position.Y, Field.MyGoal.Bottom.Y), Field.MyGoal.Top.Y)));
+                                // 
+                                //if ()
+                                //{
+                                //    // player.ActionGo(new Vector(50, Math.Max(Math.Min(ball.Position.Y, Field.MyGoal.Bottom.Y), Field.MyGoal.Top.Y)));
+
+                                //}
+                                //else
+                                //{
+                                
+                                //}
+                            
                             break;
                         case PlayerType.LeftDefender:
                             break;
@@ -118,6 +141,26 @@ namespace TeamName
                     }
                 }
             }
+        }
+
+        private float ballTrajectoryYPos(Ball ball, float x)
+        {
+            return (ball.Velocity.Y / ball.Velocity.X)*(x-ball.Position.X) + ball.Position.Y;
+        }
+
+        private IPosition goaliePosition(Ball ball)
+        {
+            return new Vector();
+        }
+
+        private IPosition ballPosToTeamPos(IPosition pos)
+        {
+            return new Vector(Field.Borders.Width/2 - pos.Position.X, Field.Borders.Height/2 - pos.Position.Y);
+        }
+
+        private IPosition teamPosToBallPos(IPosition pos)
+        {
+            return new Vector(Field.Borders.Width / 2 - ball.Position.X, Field.Borders.Height / 2 - ball.Position.Y);
         }
     }
 }

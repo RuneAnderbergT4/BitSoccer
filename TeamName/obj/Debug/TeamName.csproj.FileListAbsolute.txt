@@ -4,3 +4,8 @@ C:\Git\RuneAnderbergT4\BitSoccer\TeamName\bin\Debug\Common.dll
 C:\Git\RuneAnderbergT4\BitSoccer\TeamName\obj\Debug\TeamName.csprojResolveAssemblyReference.cache
 C:\Git\RuneAnderbergT4\BitSoccer\TeamName\obj\Debug\TeamName.dll
 C:\Git\RuneAnderbergT4\BitSoccer\TeamName\obj\Debug\TeamName.pdb
+D:\Git\RuneAnderbergT4\BitSoccer\TeamName\bin\Debug\TeamName.dll
+D:\Git\RuneAnderbergT4\BitSoccer\TeamName\bin\Debug\TeamName.pdb
+D:\Git\RuneAnderbergT4\BitSoccer\TeamName\bin\Debug\Common.dll
+D:\Git\RuneAnderbergT4\BitSoccer\TeamName\obj\Debug\TeamName.dll
+D:\Git\RuneAnderbergT4\BitSoccer\TeamName\obj\Debug\TeamName.pdb
