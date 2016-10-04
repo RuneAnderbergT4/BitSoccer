@@ -4,3 +4,9 @@ C:\GIT\csharpskolan\bitsoccer\BitSoccerClient\TeamTwo\bin\Debug\TeamTwo.pdb
 C:\GIT\csharpskolan\bitsoccer\BitSoccerClient\TeamTwo\bin\Debug\Common.dll
 C:\GIT\csharpskolan\bitsoccer\BitSoccerClient\TeamTwo\obj\Debug\TeamTwo.dll
 C:\GIT\csharpskolan\bitsoccer\BitSoccerClient\TeamTwo\obj\Debug\TeamTwo.pdb
+C:\Git\RuneAnderbergT4\BitSoccer\TeamTwo\bin\Debug\TeamTwo.dll
+C:\Git\RuneAnderbergT4\BitSoccer\TeamTwo\bin\Debug\TeamTwo.pdb
+C:\Git\RuneAnderbergT4\BitSoccer\TeamTwo\bin\Debug\Common.dll
+C:\Git\RuneAnderbergT4\BitSoccer\TeamTwo\obj\Debug\TeamTwo.csprojResolveAssemblyReference.cache
+C:\Git\RuneAnderbergT4\BitSoccer\TeamTwo\obj\Debug\TeamTwo.dll
+C:\Git\RuneAnderbergT4\BitSoccer\TeamTwo\obj\Debug\TeamTwo.pdb

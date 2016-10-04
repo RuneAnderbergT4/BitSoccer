@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitSoccerClient", "BitSoccerClient\BitSoccerClient.csproj", "{CBB722A2-1170-43F6-8D3A-5DB8D4F4EA70}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamOne", "TeamOne\TeamOne.csproj", "{4C1F167E-7F9F-408B-890B-FB639063E872}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamTwo", "TeamTwo\TeamTwo.csproj", "{6332BF10-7834-4178-BA5A-CC1950BBCA42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamName", "TeamName\TeamName.csproj", "{A127C17C-BE63-4824-AD80-5034DFD7603B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,14 @@ Global
 		{6332BF10-7834-4178-BA5A-CC1950BBCA42}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6332BF10-7834-4178-BA5A-CC1950BBCA42}.Release|x86.ActiveCfg = Release|Any CPU
 		{6332BF10-7834-4178-BA5A-CC1950BBCA42}.Release|x86.Build.0 = Release|Any CPU
+		{A127C17C-BE63-4824-AD80-5034DFD7603B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A127C17C-BE63-4824-AD80-5034DFD7603B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A127C17C-BE63-4824-AD80-5034DFD7603B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A127C17C-BE63-4824-AD80-5034DFD7603B}.Debug|x86.Build.0 = Debug|Any CPU
+		{A127C17C-BE63-4824-AD80-5034DFD7603B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A127C17C-BE63-4824-AD80-5034DFD7603B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A127C17C-BE63-4824-AD80-5034DFD7603B}.Release|x86.ActiveCfg = Release|Any CPU
+		{A127C17C-BE63-4824-AD80-5034DFD7603B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

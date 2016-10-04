@@ -16,7 +16,7 @@ namespace BitSoccerClient
         {
             Common.Global.Random = new Random(0);
 
-            using (var game = new BitSoccerClient(new TeamOne.TeamOne(), new TeamTwo.TeamTwo()))
+            using (var game = new BitSoccerClient(new TeamOne.TeamOne(), new TeamName.TeamName()))
             {
                 game.Run();
             }

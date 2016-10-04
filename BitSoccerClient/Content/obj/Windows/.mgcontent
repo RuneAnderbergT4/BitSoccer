@@ -4,14 +4,14 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/ball.png</File>
-    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/circle.png</File>
-    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/Field.png</File>
-    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/Numbers.png</File>
-    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/PauseButton.png</File>
-    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/player.png</File>
-    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/progressDot.png</File>
-    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/runButton.png</File>
-    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/SergoeUIMono.spritefont</File>
+    <File>C:/Git/RuneAnderbergT4/BitSoccer/BitSoccerClient/Content/ball.png</File>
+    <File>C:/Git/RuneAnderbergT4/BitSoccer/BitSoccerClient/Content/circle.png</File>
+    <File>C:/Git/RuneAnderbergT4/BitSoccer/BitSoccerClient/Content/Field.png</File>
+    <File>C:/Git/RuneAnderbergT4/BitSoccer/BitSoccerClient/Content/Numbers.png</File>
+    <File>C:/Git/RuneAnderbergT4/BitSoccer/BitSoccerClient/Content/PauseButton.png</File>
+    <File>C:/Git/RuneAnderbergT4/BitSoccer/BitSoccerClient/Content/player.png</File>
+    <File>C:/Git/RuneAnderbergT4/BitSoccer/BitSoccerClient/Content/progressDot.png</File>
+    <File>C:/Git/RuneAnderbergT4/BitSoccer/BitSoccerClient/Content/runButton.png</File>
+    <File>C:/Git/RuneAnderbergT4/BitSoccer/BitSoccerClient/Content/SergoeUIMono.spritefont</File>
   </SourceFiles>
 </SourceFileCollection>
