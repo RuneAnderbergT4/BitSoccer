@@ -21,27 +21,41 @@ namespace TeamName
                 {
                     if (player.PlayerType == PlayerType.Keeper)
                     {
-                        var rndDef = random.Next(3);
-                        switch (rndDef)
-                        {
-                            case 0:
-                                player.ActionShoot(myTeam.Players.Find());
-                                break;
-                            case 1:
-                                break;
-                            case 2:
-                                break;
-                        }
-                    }
-                    else if (b)
-                    {
+                        // Find player of type LD, RD or CF and pass to the one that has an enemy player the furthest away
+                        var target = myTeam.Players.Find();
                         
+                        player.ActionShoot(target);
+                    }
+                    else if (player.PlayerType == PlayerType.LeftDefender || player.PlayerType == PlayerType.CenterForward || player.PlayerType == PlayerType.RightDefender)
+                    {
+                        // Find player of type LF or RF and pass to the one that has an enemy player the furthest away
+                        player.ActionShoot(player.GetClosest(myTeam));
                     }
                     else
                     {
+                        // Finds enemy GK
+                        var enemyGK = enemyTeam.Players.Find((player1 => player1.PlayerType == PlayerType.Keeper));
+
+                        // Checks GK distance to top & bottom of goal
+                        var disTop = enemyGK.GetDistanceTo(Field.EnemyGoal.Top);
+                        var disBot = enemyGK.GetDistanceTo(Field.EnemyGoal.Bottom);
+
+                        // Shoot at the side of the goal the enemy GK is furthest away from
+                        if (disTop > disBot)
+                        {
+                            player.ActionShoot(Field.EnemyGoal.Top);
+                        }
+                        else if (disBot > disTop)
+                        {
+                            player.ActionShoot(Field.EnemyGoal.Bottom);
+                        }
+                        else
+                        {
+                            player.ActionShoot(Field.EnemyGoal);
+                        }
                         
                     }
-                    player.ActionShootGoal();
+                    
                 }
 
                 else if (player.CanPickUpBall(ball)) // Picks up the ball if posible.
