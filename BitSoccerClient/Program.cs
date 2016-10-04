@@ -16,10 +16,15 @@ namespace BitSoccerClient
         {
             Common.Global.Random = new Random(0);
 
-            using (var game = new BitSoccerClient(new TeamOne.TeamOne(), new TeamName.TeamName()))
+            using (var game = new BitSoccerClient(new TeamTwo.TeamTwo(), new TeamName.TeamName()))
             {
                 game.Run();
             }
+
+            //using (var game = new BitSoccerClient(new TeamName.TeamName(), new TeamTwo.TeamTwo()))
+            //{
+            //    game.Run();
+            //}
         }
     }
 #endif
