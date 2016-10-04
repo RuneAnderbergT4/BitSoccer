@@ -23,10 +23,6 @@ namespace TeamName
 
                 if (ball.Owner == player)
                 {
-                    player.ActionShootGoal();
-
-                    var bal = ball;
-
                     switch (player.PlayerType)
                     {
                         case PlayerType.Keeper:
