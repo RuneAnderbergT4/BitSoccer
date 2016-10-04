@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/ball.png</File>
+    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/circle.png</File>
+    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/Field.png</File>
+    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/Numbers.png</File>
+    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/PauseButton.png</File>
+    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/player.png</File>
+    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/progressDot.png</File>
+    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/runButton.png</File>
+    <File>C:/GIT/csharpskolan/bitsoccer/BitSoccerClient/BitSoccerClient/Content/SergoeUIMono.spritefont</File>
+  </SourceFiles>
+</SourceFileCollection>

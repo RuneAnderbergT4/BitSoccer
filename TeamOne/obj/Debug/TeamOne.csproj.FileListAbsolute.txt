@@ -1,0 +1,5 @@
+C:\GIT\csharpskolan\bitsoccer\BitSoccerClient\TeamOne\bin\Debug\TeamOne.dll
+C:\GIT\csharpskolan\bitsoccer\BitSoccerClient\TeamOne\bin\Debug\TeamOne.pdb
+C:\GIT\csharpskolan\bitsoccer\BitSoccerClient\TeamOne\bin\Debug\Common.dll
+C:\GIT\csharpskolan\bitsoccer\BitSoccerClient\TeamOne\obj\Debug\TeamOne.dll
+C:\GIT\csharpskolan\bitsoccer\BitSoccerClient\TeamOne\obj\Debug\TeamOne.pdb
