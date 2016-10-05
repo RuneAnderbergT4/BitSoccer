@@ -4,8 +4,11 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using Common;
+using Vector = Common.Vector;
 
 namespace TeamName
 {
@@ -316,24 +319,79 @@ namespace TeamName
             return new Vector(_defenderMaxX, BallTrajectoryYPos(ball, _defenderMaxX));
         }
 
-        private bool CheckIntersection(Player myPlayer, Player targetPlayer, Team enemyTeam)
+        private bool CheckIfPlayerIsFree(Player myPlayer, Player targetPlayer, Team enemyTeam, double radius)
         {
-            var line = new Line();
-            line.X1 = myPlayer.Position.X;
-            line.Y1 = myPlayer.Position.Y;
-            line.X2 = targetPlayer.Position.X;
-            line.Y2 = targetPlayer.Position.Y;
+            var line = new Line
+            {
+                X1 = myPlayer.Position.X,
+                Y1 = myPlayer.Position.Y,
+                X2 = targetPlayer.Position.X,
+                Y2 = targetPlayer.Position.Y
+            };
 
-            var octagon = new Polygon();
-            octagon.
+            var side = radius/Math.Pow(2, 0.5);
+
+            var isFree = true;
 
             foreach (var player in enemyTeam.Players)
             {
-                
-            }
+                var enemyX = player.Position.X;
+                var enemyY = player.Position.Y;
 
-            return true;
+                //var octagon = new Polygon();
+                //octagon.Points.Add(new Point(enemyX, enemyY - radius));
+                //octagon.Points.Add(new Point(enemyX - side, enemyY - side));
+                //octagon.Points.Add(new Point(enemyX - radius, enemyY));
+                //octagon.Points.Add(new Point(enemyX - side, enemyY + side));
+                //octagon.Points.Add(new Point(enemyX, enemyY + radius));
+                //octagon.Points.Add(new Point(enemyX + side, enemyY + side));
+                //octagon.Points.Add(new Point(enemyX + radius, enemyY));
+                //octagon.Points.Add(new Point(enemyX + side, enemyY - side));
+
+                List<Point> octagon = new List<Point>
+                {
+                    new Point(enemyX, enemyY - radius),
+                    new Point(enemyX - side, enemyY - side),
+                    new Point(enemyX - radius, enemyY),
+                    new Point(enemyX - side, enemyY + side),
+                    new Point(enemyX, enemyY + radius),
+                    new Point(enemyX + side, enemyY + side),
+                    new Point(enemyX + radius, enemyY),
+                    new Point(enemyX + side, enemyY - side)
+                };
+
+                if (CheckIntersection(line, octagon))
+                {
+                    isFree = false;
+                }
+            }
+            return isFree;
         }
+
+        private bool CheckIntersection(Line line, IEnumerable<Point> octagon)
+        {
+            if (octagon == null || !octagon.Any()) return false;
+            var side = GetSide(new Point(line.X1, line.Y1), new Point(line.X2, line.Y2), octagon.First());
+            return
+                side == 0
+                    ? true
+                    : octagon.All(x => GetSide(new Point(line.X1, line.Y1), new Point(line.X2, line.Y2), x) == side);
+        }
+
+        public int GetSide(Point lineP1, Point lineP2, Point queryP)
+        {
+            return Math.Sign((lineP2.X - lineP1.X) * (queryP.Y - lineP1.Y) - (lineP2.Y - lineP1.Y) * (queryP.X - lineP1.X));
+        }
+
+        //public static bool IsOutside(Point lineP1, Point lineP2, IEnumerable<Point> region)
+        //{
+        //    if (region == null || !region.Any()) return true;
+        //    var side = GetSide(lineP1, lineP2, region.First());
+        //    return
+        //      side == 0
+        //      ? false
+        //      : region.All(x => GetSide(lineP1, lineP2, x) == side);
+        //}
     }
 }
     
