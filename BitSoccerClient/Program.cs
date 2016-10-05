@@ -1,4 +1,5 @@
 ﻿using System;
+using Common;
 
 namespace BitSoccerClient
 {
@@ -15,7 +16,7 @@ namespace BitSoccerClient
         static void Main()
         {
             Common.Global.Random = new Random(0);
-
+            
             using (var game = new BitSoccerClient(new TeamTwo.TeamTwo(), new TeamName.TeamName()))
             {
                 game.Run();

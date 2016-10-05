@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 using Common;
 
 namespace TeamName
@@ -313,6 +314,25 @@ namespace TeamName
         private IPosition DefenderPosition(Ball ball)
         {
             return new Vector(_defenderMaxX, BallTrajectoryYPos(ball, _defenderMaxX));
+        }
+
+        private bool CheckIntersection(Player myPlayer, Player targetPlayer, Team enemyTeam)
+        {
+            var line = new Line();
+            line.X1 = myPlayer.Position.X;
+            line.Y1 = myPlayer.Position.Y;
+            line.X2 = targetPlayer.Position.X;
+            line.Y2 = targetPlayer.Position.Y;
+
+            var octagon = new Polygon();
+            octagon.
+
+            foreach (var player in enemyTeam.Players)
+            {
+                
+            }
+
+            return true;
         }
     }
 }
