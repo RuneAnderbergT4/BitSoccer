@@ -83,8 +83,70 @@ namespace TeamName
                             
                             break;
                         case PlayerType.CenterForward:
+                            if (player.GetDistanceTo(Field.EnemyGoal) < 300)
+                            {
+                                // Finds enemy GK
+                                var enemyTeamGK = enemyTeam.Players.Find(player1 => player1.PlayerType == PlayerType.Keeper);
+
+                                // Checks GK distance to top & bottom of goal
+                                var disBot = enemyTeamGK.GetDistanceTo(Field.EnemyGoal.Top);
+                                var disTop = enemyTeamGK.GetDistanceTo(Field.EnemyGoal.Bottom);
+
+                                // Shoot at the side of the goal the enemy GK is furthest away from
+                                if (disTop >= disBot)
+                                {
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Top.Y - 20));
+                                }
+                                else if (disBot >= disTop)
+                                {
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Bottom.Y + 20));
+                                }
+                                else
+                                {
+                                    player.ActionShootGoal();
+                                }
+                            }
+                            else if (player.GetDistanceTo(closestEnemy) < 100)
+                            {
+                                player.ActionShoot(player.GetClosest(myTeam), 6);
+                            }
+                            else
+                            {
+                                player.ActionGo(Field.EnemyGoal);
+                            }
                             break;
                         case PlayerType.RightForward:
+                            if (player.GetDistanceTo(Field.EnemyGoal) < 300)
+                            {
+                                // Finds enemy GK
+                                var enemyTeamGK = enemyTeam.Players.Find(player1 => player1.PlayerType == PlayerType.Keeper);
+
+                                // Checks GK distance to top & bottom of goal
+                                var disBot = enemyTeamGK.GetDistanceTo(Field.EnemyGoal.Top);
+                                var disTop = enemyTeamGK.GetDistanceTo(Field.EnemyGoal.Bottom);
+
+                                // Shoot at the side of the goal the enemy GK is furthest away from
+                                if (disTop >= disBot)
+                                {
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Top.Y - 20));
+                                }
+                                else if (disBot >= disTop)
+                                {
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Bottom.Y + 20));
+                                }
+                                else
+                                {
+                                    player.ActionShootGoal();
+                                }
+                            }
+                            else if (player.GetDistanceTo(closestEnemy) < 100)
+                            {
+                                player.ActionShoot(player.GetClosest(myTeam), 6);
+                            }
+                            else
+                            {
+                                player.ActionGo(Field.EnemyGoal);
+                            }
                             break;
                         default:
                             player.ActionShootGoal();
@@ -189,11 +251,38 @@ namespace TeamName
                                 player.ActionGo(new Vector(_defenderMaxX, dY + 100));
                             }
                             break;
-                        case PlayerType.CenterForward:
-                            break;
                         case PlayerType.LeftForward:
+                            if (player == ball.GetClosest(myTeam))
+                            {
+                                player.ActionGo(ball);
+                            }
+                            else
+                            {
+                                // Get into position without nearby enemies
+                                player.ActionGo(Field.EnemyGoal);
+                            }
+                            break;
+                        case PlayerType.CenterForward:
+                            if (player == ball.GetClosest(myTeam))
+                            {
+                                player.ActionGo(ball);
+                            }
+                            else
+                            {
+                                // Get into position without nearby enemies
+                                player.ActionGo(Field.EnemyGoal);
+                            }
                             break;
                         case PlayerType.RightForward:
+                            if (player == ball.GetClosest(myTeam))
+                            {
+                                player.ActionGo(ball);
+                            }
+                            else
+                            {
+                                // Get into position without nearby enemies
+                                player.ActionGo(Field.EnemyGoal);
+                            }
                             break;
                         default:
                             player.ActionShootGoal();
