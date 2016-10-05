@@ -18,12 +18,14 @@ namespace TeamName
 
         public void Action(Team myTeam, Team enemyTeam, Ball ball, MatchInfo matchInfo)
         {
-            var vel = Common.Constants.PlayerMaxVelocity;
-            var bal = ball.Velocity;
-
-            var temp1 = Field.Borders.Height/2;
-
-            var temp = Field.Borders.Width / 2;
+            if (ball.Position.X > 800 && _lastTeam == myTeam)
+            {
+                _defenderMaxX = 240;
+            }
+            else
+            {
+                _defenderMaxX = 120;
+            }
 
             if (ball.Owner != null)
             {
@@ -295,6 +297,11 @@ namespace TeamName
         private float BallTrajectoryYPos(Ball ball, float x)
         {
             return (ball.Velocity.Y / ball.Velocity.X)*(x-ball.Position.X) + ball.Position.Y;
+        }
+
+        private float EnemyTrajectoryYPos(Player enemy, float x)
+        {
+            return (enemy.Velocity.Y/enemy.Velocity.X)*(x - enemy.Position.X) + enemy.Position.Y;
         }
 
         private IPosition GoaliePosition(Ball ball)
