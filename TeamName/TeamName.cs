@@ -457,7 +457,7 @@ namespace TeamName
 
         private bool CheckIntersection(Point circlePos, float circleRadius, Point point1, Point point2)
         {
-            float dx, dy, A, B, C, det, t;
+            float dx, dy, A, B, C, det;
 
             float cx = (float) circlePos.X;
             float cy = (float) circlePos.Y;
