@@ -24,9 +24,9 @@ namespace BitSoccerClient
         private ITeam _team1;
         private ITeam _team2;
         private BallInfo _ballInfo;
-        public GameState gameState;
+        public GameState GameState;
 
-        private const string _title = "BitSoccer";
+        private const string Title = "BitSoccer";
         private int _matchLength = Constants.GameEngineMatchLength;
         private IGameEngine _gameEngine;
 
@@ -43,19 +43,19 @@ namespace BitSoccerClient
 
         private bool _successfullyLoaded;
 
-        private bool c;
+        private bool _c;
         private bool _shouldExecute;
-        private bool ae;
-        private bool af;
-        private bool ab;
+        private bool _ae;
+        private bool _af;
+        private bool _ab;
 
         private GameStateList _gameStates;
         private ScoreInfo _scoreInfo;
         private DevPromtDialog _devPromptDialog;
 
         private int _ballMaxPickUpDistance;
-        private int v;
-        private int w;
+        private int _v;
+        private int _w;
         private int _playerMaxTackleDistance;
         private double _scale;
 
@@ -71,14 +71,14 @@ namespace BitSoccerClient
         private Microsoft.Xna.Framework.Rectangle _rectSaveReplayButton;
         private Microsoft.Xna.Framework.Rectangle _rectLoadReplayButton;
         private Microsoft.Xna.Framework.Rectangle _rectField = new Microsoft.Xna.Framework.Rectangle(128, 127, 724, 401);
-        private Microsoft.Xna.Framework.Rectangle u;
+        private Microsoft.Xna.Framework.Rectangle _u;
         private Microsoft.Xna.Framework.Rectangle _rectStartPauseButton;
         private Microsoft.Xna.Framework.Rectangle _rectSliderButton;
         private Microsoft.Xna.Framework.Rectangle _rectStepBackButton;
         private Microsoft.Xna.Framework.Rectangle _rectStepForwardButton;
 
 
-        private List<TeamInfo> Teams;
+        private List<TeamInfo> _teams;
 
         public event EventHandler Initialized;
 
@@ -134,19 +134,19 @@ namespace BitSoccerClient
 
         private static void UpdateConfig()
         {
-            if (!config.Default.FirstTimeRunning)
+            if (!Config.Default.FirstTimeRunning)
                 return;
-            config.Default.team1Path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.Parent.FullName + "\\Teams\\TeamOne.dll";
-            config.Default.team2Path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.Parent.FullName + "\\Teams\\TeamTwo.dll";
-            config.Default.FirstTimeRunning = false;
-            config.Default.Save();
+            Config.Default.Team1Path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.Parent.FullName + "\\Teams\\TeamOne.dll";
+            Config.Default.Team2Path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.Parent.FullName + "\\Teams\\TeamTwo.dll";
+            Config.Default.FirstTimeRunning = false;
+            Config.Default.Save();
         }
 
         protected override void Initialize()
         {
             Mouse.WindowHandle = this.Window.Handle;
             this._shouldExecute = false;
-            this.ae = false;
+            this._ae = false;
             this._spriteBatch = new SpriteBatch(this.GraphicsDevice);
 
             this._previousMouseState = Mouse.GetState();
@@ -179,7 +179,7 @@ namespace BitSoccerClient
             this.ClientSizeChanged1(new object(), new EventArgs());
 
             this._devPromptDialog = new DevPromtDialog();
-            if (config.Default.showPrompt)
+            if (Config.Default.ShowPrompt)
                 this._devPromptDialog.ShowPromt();
             else
                 this._devPromptDialog.HidePromt();
@@ -207,13 +207,13 @@ namespace BitSoccerClient
                 this._gameEngine = null;
             }
             this._shouldExecute = false;
-            this.w = 0;
-            this.v = 0;
+            this._w = 0;
+            this._v = 0;
             try
             {
                 this._gameEngine = this._team1 == null || this._team2 == null ?
-                    (!this.Security ? (IGameEngine)new GameEngine.GameEngine(config.Default.team1Path, config.Default.team2Path) :
-                    (IGameEngine)new LocalSecureGameEngine(config.Default.team1Path, config.Default.team2Path)) :
+                    (!this.Security ? (IGameEngine)new GameEngine.GameEngine(Config.Default.Team1Path, Config.Default.Team2Path) :
+                    (IGameEngine)new LocalSecureGameEngine(Config.Default.Team1Path, Config.Default.Team2Path)) :
                     (IGameEngine)new GameEngine.GameEngine(this._team1, this._team2);
 
                 this._gameEngine.setTimeout(this.CheckForTimeouts);
@@ -230,9 +230,9 @@ namespace BitSoccerClient
 
         private void GetGameStates()
         {
-            this.gameState = this._gameEngine.GetCurrent();
-            this.Teams = this.gameState.Teams();
-            this._ballInfo = this.gameState.BallInfo;
+            this.GameState = this._gameEngine.GetCurrent();
+            this._teams = this.GameState.Teams();
+            this._ballInfo = this.GameState.BallInfo;
             this._gameStates = new GameStateList(this._gameEngine.Team1Name(), this._gameEngine.Team2Name());
         }
 
@@ -240,27 +240,27 @@ namespace BitSoccerClient
         {
             if (this._successfullyLoaded)
             {
-                if (this._shouldExecute && this.w < this._matchLength && this.w == this.v)
+                if (this._shouldExecute && this._w < this._matchLength && this._w == this._v)
                     this.NextGameState();
-                else if (this._shouldExecute && this.w < this._matchLength)
+                else if (this._shouldExecute && this._w < this._matchLength)
                 {
-                    this.gameState = this._gameStates[this.w];
-                    ++this.w;
+                    this.GameState = this._gameStates[this._w];
+                    ++this._w;
                 }
                 else
-                    this.gameState = this._gameStates == null || this._gameStates.Count == 0 ? new GameState() : (this.w < this._gameStates.Count ? this._gameStates[this.w] : this._gameStates[this._gameStates.Count - 1]);
+                    this.GameState = this._gameStates == null || this._gameStates.Count == 0 ? new GameState() : (this._w < this._gameStates.Count ? this._gameStates[this._w] : this._gameStates[this._gameStates.Count - 1]);
             }
             else
-                this.gameState = new GameState();
+                this.GameState = new GameState();
 
 
             base.Update(gameTime);
 
-            if (this.gameState != null)
+            if (this.GameState != null)
             {
-                this.Teams = this.gameState.Teams();
-                this._ballInfo = this.gameState.BallInfo;
-                this._scoreInfo = this.gameState.GetScoreInfo();
+                this._teams = this.GameState.Teams();
+                this._ballInfo = this.GameState.BallInfo;
+                this._scoreInfo = this.GameState.GetScoreInfo();
             }
             this._currentMousestate = Mouse.GetState();
             this._mousePosition = new Point(this._currentMousestate.X, this._currentMousestate.Y);
@@ -268,54 +268,54 @@ namespace BitSoccerClient
             if (this._currentMousestate.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed
                 && this.IsActive && this._previousMouseState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released)
             {
-                if ((this.u.Contains(this._mousePosition) || this.af) && this._successfullyLoaded)
+                if ((this._u.Contains(this._mousePosition) || this._af) && this._successfullyLoaded)
                 {
-                    this.ae = true;
+                    this._ae = true;
                     int num = Math.Min(Math.Max(0, this._matchLength * (this._mousePosition.X - this._rectSliderButton.X) / this._rectSliderButton.Width), this._matchLength);
-                    if (num < this.v)
+                    if (num < this._v)
                     {
-                        this.w = num;
+                        this._w = num;
                     }
                     else
                     {
-                        this.w = this.v;
-                        while (this.v < this._matchLength && this.w < num)
+                        this._w = this._v;
+                        while (this._v < this._matchLength && this._w < num)
                             this.NextGameState();
                     }
-                    this.af = true;
+                    this._af = true;
                 }
                 if (this._rectSliderButton.Contains(this._mousePosition) && this._successfullyLoaded)
                 {
-                    this.ae = true;
+                    this._ae = true;
                     int num = Math.Min(Math.Max(0, this._matchLength * (this._mousePosition.X - this._rectSliderButton.X) / this._rectSliderButton.Width), this._matchLength);
-                    if (num < this.v)
+                    if (num < this._v)
                     {
-                        this.w = num;
+                        this._w = num;
                     }
                     else
                     {
-                        this.w = this.v;
-                        while (this.v < this._matchLength && this.w < num)
+                        this._w = this._v;
+                        while (this._v < this._matchLength && this._w < num)
                             this.NextGameState();
                     }
                 }
                 if (this._rectStepBackButton.Contains(this._mousePosition) && this._successfullyLoaded)
                 {
                     this._shouldExecute = false;
-                    if (this.w > 0)
-                        --this.w;
+                    if (this._w > 0)
+                        --this._w;
                 }
                 if (this._rectStepForwardButton.Contains(this._mousePosition) && this._successfullyLoaded)
                 {
                     this._shouldExecute = false;
-                    if (this.w < this.v)
-                        ++this.w;
-                    else if (this.w == this.v && this.w < this._matchLength)
+                    if (this._w < this._v)
+                        ++this._w;
+                    else if (this._w == this._v && this._w < this._matchLength)
                         this.NextGameState();
                 }
-                if (this._rectStartPauseButton.Contains(this._mousePosition) && !this.ab && this._successfullyLoaded)
+                if (this._rectStartPauseButton.Contains(this._mousePosition) && !this._ab && this._successfullyLoaded)
                     this._shouldExecute = !this._shouldExecute;
-                if (!this.ae)
+                if (!this._ae)
                 {
                     if (this._rectSaveReplayButton.Contains(this._mousePosition))
                         this.SaveReplay();
@@ -327,69 +327,69 @@ namespace BitSoccerClient
                         this.LoadTeams(2);
                     if (this._rectRestartButton.Contains(this._mousePosition))
                         this.RestartGame();
-                    if (this._rectShowDevPromtButton.Contains(this._mousePosition) && !this.ab)
+                    if (this._rectShowDevPromtButton.Contains(this._mousePosition) && !this._ab)
                     {
-                        config.Default.showPrompt = !config.Default.showPrompt;
-                        config.Default.Save();
+                        Config.Default.ShowPrompt = !Config.Default.ShowPrompt;
+                        Config.Default.Save();
                         if (this._devPromptDialog.IsVisible())
                             this._devPromptDialog.HidePromt();
                         else
                             this._devPromptDialog.ShowPromt();
                     }
                 }
-                this.ab = true;
+                this._ab = true;
             }
             else
             {
-                this.ab = false;
-                this.af = false;
+                this._ab = false;
+                this._af = false;
             }
             this._keyboardState = Keyboard.GetState();
             if (this.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left) && this._successfullyLoaded)
             {
                 this._shouldExecute = false;
-                if (this.w > 0)
-                    --this.w;
+                if (this._w > 0)
+                    --this._w;
             }
             if (this.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right) && this._successfullyLoaded)
             {
                 this._shouldExecute = false;
-                if (this.w < this.v)
-                    ++this.w;
-                else if (this.w == this.v && this.w < this._matchLength)
+                if (this._w < this._v)
+                    ++this._w;
+                else if (this._w == this._v && this._w < this._matchLength)
                     this.NextGameState();
             }
             if (this.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.End) && this._successfullyLoaded)
             {
                 this._shouldExecute = false;
-                this.w = this.v;
-                while (this.v < this._matchLength)
+                this._w = this._v;
+                while (this._v < this._matchLength)
                     this.NextGameState();
             }
             if (this.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Home) && this._successfullyLoaded)
             {
                 this._shouldExecute = false;
-                this.w = 0;
+                this._w = 0;
             }
             if ((this.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Pause) || this.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space)) && this._successfullyLoaded)
                 this._shouldExecute = !this._shouldExecute;
             this._currentKeyboardState = this._keyboardState;
             if (this._currentMousestate.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released)
-                this.ae = false;
-            if (this.ae)
+                this._ae = false;
+            if (this._ae)
                 return;
             this._previousMouseState = this._currentMousestate;
         }
 
         private void NextGameState()
         {
-            this.gameState = this._gameEngine.GetNext();
-            this._gameStates.Add(this.gameState);
-            ++this.v;
-            ++this.w;
-            if (!(this.gameState.GetDevMessage() != "") || this._devPromptDialog.IsDisposed)
+            this.GameState = this._gameEngine.GetNext();
+            this._gameStates.Add(this.GameState);
+            ++this._v;
+            ++this._w;
+            if (!(this.GameState.GetDevMessage() != "") || this._devPromptDialog.IsDisposed)
                 return;
-            this._devPromptDialog.AppendText(this.gameState.GetDevMessage());
+            this._devPromptDialog.AppendText(this.GameState.GetDevMessage());
         }
 
         #region Draw Methods 
@@ -416,7 +416,7 @@ namespace BitSoccerClient
 
         private void DrawTrace()
         {
-            for (int index = Math.Max(0, this.w - this.TraceLength); index < this.w - 1; ++index)
+            for (int index = Math.Max(0, this._w - this.TraceLength); index < this._w - 1; ++index)
             {
                 Color color = Color.Red;
                 Vector vector;
@@ -428,7 +428,7 @@ namespace BitSoccerClient
                         vector = player.GetPosition();
                         float num1 = (float)(((double)this._rectField.X + (double)vector.X * (double)this._rectField.Width / (double)Field.Borders.Width) * this._scale);
                         float num2 = (float)(((double)this._rectField.Y + (double)vector.Y * (double)this._rectField.Height / (double)Field.Borders.Height) * this._scale);
-                        int num3 = (int)((double)(this.TraceLength - this.w + index) / (double)this.TraceLength * 3.0 * this._scale);
+                        int num3 = (int)((double)(this.TraceLength - this._w + index) / (double)this.TraceLength * 3.0 * this._scale);
                         position = new Vector2(num1 - (float)(num3 / 2), num2 - (float)(num3 / 2));
                         this._spriteBatch.Draw(this._textureWhiteDot, position, new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, num3, num3)), color);
                     }
@@ -437,7 +437,7 @@ namespace BitSoccerClient
                 vector = this._gameStates[index].BallInfo.Position;
                 float num4 = (float)(((double)this._rectField.X + (double)vector.X * (double)this._rectField.Width / (double)Field.Borders.Width) * this._scale);
                 float num5 = (float)(((double)this._rectField.Y + (double)vector.Y * (double)this._rectField.Height / (double)Field.Borders.Height) * this._scale);
-                int num6 = (int)((double)(this.TraceLength - this.w + index) / (double)this.TraceLength * 3.0 * this._scale);
+                int num6 = (int)((double)(this.TraceLength - this._w + index) / (double)this.TraceLength * 3.0 * this._scale);
                 position = new Vector2(num4 - (float)(num6 / 2), num5 - (float)(num6 / 2));
                 this._spriteBatch.Draw(this._textureWhiteDot, position, new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, num6, num6)), Color.White);
             }
@@ -451,15 +451,15 @@ namespace BitSoccerClient
             this._spriteBatch.Draw(this._textureBall, new Rectangle(x, y, this._ballMaxPickUpDistance, this._ballMaxPickUpDistance), new Rectangle(0, 0, 677, 672), Color.White);
         }
 
-        int frame = 0;
-        int frameCnt = 0;
+        int _frame = 0;
+        int _frameCnt = 0;
 
         private void DrawPlayers()
         {
             var color = new Color(255, 27, 175);
             for (var team = 0; team < 2; ++team)
             {
-                var teamInfos = Teams[team];
+                var teamInfos = _teams[team];
                 var num = 1;
                 for (var i = 0; i < teamInfos.GetPlayers().Count; ++i)
                 {
@@ -478,11 +478,11 @@ namespace BitSoccerClient
                         Color.White);
 
                     Rectangle frameRect = Rectangle.Empty;
-                    if (frame == 0 || frame == 2)
+                    if (_frame == 0 || _frame == 2)
                         frameRect = new Rectangle(2, 362, 13, 16);
-                    if (frame == 1)
+                    if (_frame == 1)
                         frameRect = new Rectangle(2, 380, 13, 16);
-                    if (frame == 3)
+                    if (_frame == 3)
                         frameRect = new Rectangle(2, 398, 13, 16);
 
                     //_spriteBatch.Draw(_texturePlayer, new Rectangle(x - 5, y - 16, (int)(26 * _scale), (int)(32 * _scale)),
@@ -497,24 +497,24 @@ namespace BitSoccerClient
                 color = Color.Blue;
             }
 
-            frameCnt++;
-            if (frameCnt > 4)
+            _frameCnt++;
+            if (_frameCnt > 4)
             {
-                frameCnt = 0;
-                frame++;
-                if (frame > 3)
-                    frame = 0;
+                _frameCnt = 0;
+                _frame++;
+                if (_frame > 3)
+                    _frame = 0;
             }
         }
 
-        private void DrawFallTime(Microsoft.Xna.Framework.Rectangle rect, double A_1, double A_2, Color A_3)
+        private void DrawFallTime(Microsoft.Xna.Framework.Rectangle rect, double a1, double a2, Color a3)
         {
             double num1 = (double)(rect.Width / 2);
             double num2 = 0.5 / num1;
-            for (double num3 = num1 - A_2; num3 <= num1; ++num3)
+            for (double num3 = num1 - a2; num3 <= num1; ++num3)
             {
                 double num4 = -1.0 * Math.PI / 2.0;
-                while (num4 < 3.0 * Math.PI / 2.0 - A_1)
+                while (num4 < 3.0 * Math.PI / 2.0 - a1)
                 {
                     this._spriteBatch.Draw(this._textureWhiteDot, new Microsoft.Xna.Framework.Rectangle((int)Math.Round((double)rect.Center.X + Math.Cos(num4) * num3), (int)Math.Round((double)rect.Center.Y + Math.Sin(num4) * num3), 1, 1), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, 1, 1)), Color.White);
                     num4 += num2;
@@ -545,11 +545,11 @@ namespace BitSoccerClient
             int length2 = str2.Length;
             for (int startIndex = 0; startIndex < length2; ++startIndex)
                 this._spriteBatch.Draw(this._textureNumbers, new Microsoft.Xna.Framework.Rectangle((int)((double)(this._textureField.Width / 2 + 75 + 30 * startIndex) * this._scale), (int)(590.0 * this._scale), (int)(40.0 * this._scale), (int)(40.0 * this._scale)), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(100 * Convert.ToInt32(str2.Substring(startIndex, 1)), 0, 100, 100)), Color.White);
-            double num = (double)this.w / (double)this._matchLength;
+            double num = (double)this._w / (double)this._matchLength;
             int width = (int)(16.0 * this._scale);
             int height = (int)(16.0 * this._scale);
-            this.u = new Microsoft.Xna.Framework.Rectangle((int)((double)(this._rectSliderButton.X + 1) + (double)(this._rectSliderButton.Width - 1 - width) * num), this._rectSliderButton.Y + 1, width, height);
-            this._spriteBatch.Draw(this._textureProgressDot, this.u, new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, 18, 16)), Color.White);
+            this._u = new Microsoft.Xna.Framework.Rectangle((int)((double)(this._rectSliderButton.X + 1) + (double)(this._rectSliderButton.Width - 1 - width) * num), this._rectSliderButton.Y + 1, width, height);
+            this._spriteBatch.Draw(this._textureProgressDot, this._u, new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, 18, 16)), Color.White);
             if (!this._shouldExecute)
                 this._spriteBatch.Draw(this._textureRunButton, this._rectStartPauseButton, new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(0, 0, 32, 32)), Color.White);
             else
@@ -570,7 +570,7 @@ namespace BitSoccerClient
             saveFileDialog.InitialDirectory = str + "\\Replays";
             saveFileDialog.Title = "Save replay";
             saveFileDialog.Filter = "Replay Files|*.cbr";
-            saveFileDialog.FileName = Path.GetFileNameWithoutExtension(config.Default.team1Path) + "-" + Path.GetFileNameWithoutExtension(config.Default.team2Path) + "-" + DateTime.Now.ToShortDateString().Replace('-', '.') + "-" + DateTime.Now.ToShortTimeString().Replace(':', '.');
+            saveFileDialog.FileName = Path.GetFileNameWithoutExtension(Config.Default.Team1Path) + "-" + Path.GetFileNameWithoutExtension(Config.Default.Team2Path) + "-" + DateTime.Now.ToShortDateString().Replace('-', '.') + "-" + DateTime.Now.ToShortTimeString().Replace(':', '.');
             if (saveFileDialog.ShowDialog() != DialogResult.OK)
                 return;
             try
@@ -600,9 +600,9 @@ namespace BitSoccerClient
             {
                 this._gameStates.Clear();
                 this._gameStates = ReplayHelper.LoadReplay(openFileDialog.FileName);
-                this.v = this._gameStates.Count;
+                this._v = this._gameStates.Count;
                 this._matchLength = this._gameStates.Count;
-                this.w = 0;
+                this._w = 0;
                 this._devPromptDialog.AppendText("Replay successfully loaded");
             }
             catch (SystemException ex)
@@ -625,20 +625,20 @@ namespace BitSoccerClient
             try
             {
                 if (teamNumber == 1)
-                    openFileDialog.InitialDirectory = Path.GetDirectoryName(config.Default.team1Path);
+                    openFileDialog.InitialDirectory = Path.GetDirectoryName(Config.Default.Team1Path);
                 else
-                    openFileDialog.InitialDirectory = Path.GetDirectoryName(config.Default.team2Path);
+                    openFileDialog.InitialDirectory = Path.GetDirectoryName(Config.Default.Team2Path);
             }
             catch
             {
                 openFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
             }
-            if (this.c)
+            if (this._c)
             {
                 openFileDialog.Filter = "Team|*.dll|Java|*.jar|Executable|*.exe|Python|*.py";
                 try
                 {
-                    string str = teamNumber != 1 ? Path.GetExtension(config.Default.team2Path) : Path.GetExtension(config.Default.team1Path);
+                    string str = teamNumber != 1 ? Path.GetExtension(Config.Default.Team2Path) : Path.GetExtension(Config.Default.Team1Path);
                     if (str.Equals(".dll"))
                         openFileDialog.FilterIndex = 1;
                     else if (str.Equals(".jar"))
@@ -661,10 +661,10 @@ namespace BitSoccerClient
                 {
                     GameEngine.GameEngine.teamOK(openFileDialog.FileName);
                     if (teamNumber == 1)
-                        config.Default.team1Path = openFileDialog.FileName;
+                        Config.Default.Team1Path = openFileDialog.FileName;
                     else
-                        config.Default.team2Path = openFileDialog.FileName;
-                    config.Default.Save();
+                        Config.Default.Team2Path = openFileDialog.FileName;
+                    Config.Default.Save();
                 }
                 catch
                 {

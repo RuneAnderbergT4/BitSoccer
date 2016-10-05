@@ -9,3 +9,4 @@ D:\Git\RuneAnderbergT4\BitSoccer\TeamName\bin\Debug\TeamName.pdb
 D:\Git\RuneAnderbergT4\BitSoccer\TeamName\bin\Debug\Common.dll
 D:\Git\RuneAnderbergT4\BitSoccer\TeamName\obj\Debug\TeamName.dll
 D:\Git\RuneAnderbergT4\BitSoccer\TeamName\obj\Debug\TeamName.pdb
+D:\Git\RuneAnderbergT4\BitSoccer\TeamName\obj\Debug\TeamName.csprojResolveAssemblyReference.cache

@@ -16,13 +16,21 @@ namespace TeamName
     {
         private static Team _lastTeam;
 
-        private static float _goalPostTop = Field.MyGoal.Top.Y;
-        private static float _goalPostBottom = Field.MyGoal.Bottom.Y;
-        private static float _goalKeeperMaxX = Field.MyGoal.Center.X + 20;
-        private static float _defenderMaxX = Field.MyGoal.Center.X + 120;
+        private float _goalPostTop = Field.MyGoal.Top.Y;
+        private float _goalPostBottom = Field.MyGoal.Bottom.Y;
+        private float _goalKeeperMaxX = Field.MyGoal.Center.X + 20;
+        private float _defenderMaxX = Field.MyGoal.Center.X + 120;
+        private List<Player> _freeForwards;
+        private List<Player> _freeDefenders;
+        private Random _random = new Random();
 
         public void Action(Team myTeam, Team enemyTeam, Ball ball, MatchInfo matchInfo)
         {
+            if (ball.Owner != null)
+            {
+                _lastTeam = ball.Owner.Team == myTeam ? myTeam : enemyTeam;
+            }
+
             if (ball.Position.X > 800 && _lastTeam == myTeam)
             {
                 _defenderMaxX = 240;
@@ -32,25 +40,33 @@ namespace TeamName
                 _defenderMaxX = 120;
             }
 
-            if (ball.Owner != null)
-            {
-                _lastTeam = ball.Owner.Team == myTeam ? myTeam : enemyTeam;
-            }
-            
             foreach (Player player in myTeam.Players)
             {
                 Player closestEnemy = player.GetClosest(enemyTeam);
 
                 if (ball.Owner == player)
                 {
-
                     switch (player.PlayerType)
                     {
                         case PlayerType.Keeper:
                             player.ActionShootGoal();
                             break;
                         case PlayerType.LeftDefender:
-                            player.ActionShoot(Field.Borders.Top);
+                            UpdateFreePlayers(myTeam, enemyTeam, player);
+
+                            if (_freeForwards.Count > 0)
+                            {
+                                player.ActionShoot(_freeForwards[_random.Next(_freeForwards.Count)]);
+                            }
+                            else if (_freeDefenders.Count > 0)
+                            {
+                                player.ActionShoot(_freeDefenders[_random.Next(_freeDefenders.Count)]);
+                            }
+                            else
+                            {
+                                player.ActionShoot(Field.Borders.Top);
+                            }
+
                             break;
                         case PlayerType.RightDefender:
                             player.ActionShoot(Field.Borders.Bottom);
@@ -59,11 +75,11 @@ namespace TeamName
                             if (player.GetDistanceTo(Field.EnemyGoal) < 300)
                             {
                                 // Finds enemy GK
-                                var enemyTeamGK = enemyTeam.Players.Find(player1 => player1.PlayerType == PlayerType.Keeper);
+                                var enemyTeamGk = enemyTeam.Players.Find(player1 => player1.PlayerType == PlayerType.Keeper);
 
                                 // Checks GK distance to top & bottom of goal
-                                var disBot = enemyTeamGK.GetDistanceTo(Field.EnemyGoal.Top);
-                                var disTop = enemyTeamGK.GetDistanceTo(Field.EnemyGoal.Bottom);
+                                var disBot = enemyTeamGk.GetDistanceTo(Field.EnemyGoal.Top);
+                                var disTop = enemyTeamGk.GetDistanceTo(Field.EnemyGoal.Bottom);
 
                                 // Shoot at the side of the goal the enemy GK is furthest away from
                                 if (disTop >= disBot)
@@ -93,11 +109,11 @@ namespace TeamName
                             if (player.GetDistanceTo(Field.EnemyGoal) < 300)
                             {
                                 // Finds enemy GK
-                                var enemyTeamGK = enemyTeam.Players.Find(player1 => player1.PlayerType == PlayerType.Keeper);
+                                var enemyTeamGk = enemyTeam.Players.Find(player1 => player1.PlayerType == PlayerType.Keeper);
 
                                 // Checks GK distance to top & bottom of goal
-                                var disBot = enemyTeamGK.GetDistanceTo(Field.EnemyGoal.Top);
-                                var disTop = enemyTeamGK.GetDistanceTo(Field.EnemyGoal.Bottom);
+                                var disBot = enemyTeamGk.GetDistanceTo(Field.EnemyGoal.Top);
+                                var disTop = enemyTeamGk.GetDistanceTo(Field.EnemyGoal.Bottom);
 
                                 // Shoot at the side of the goal the enemy GK is furthest away from
                                 if (disTop >= disBot)
@@ -126,11 +142,11 @@ namespace TeamName
                             if (player.GetDistanceTo(Field.EnemyGoal) < 300)
                             {
                                 // Finds enemy GK
-                                var enemyTeamGK = enemyTeam.Players.Find(player1 => player1.PlayerType == PlayerType.Keeper);
+                                var enemyTeamGk = enemyTeam.Players.Find(player1 => player1.PlayerType == PlayerType.Keeper);
 
                                 // Checks GK distance to top & bottom of goal
-                                var disBot = enemyTeamGK.GetDistanceTo(Field.EnemyGoal.Top);
-                                var disTop = enemyTeamGK.GetDistanceTo(Field.EnemyGoal.Bottom);
+                                var disBot = enemyTeamGk.GetDistanceTo(Field.EnemyGoal.Top);
+                                var disTop = enemyTeamGk.GetDistanceTo(Field.EnemyGoal.Bottom);
 
                                 // Shoot at the side of the goal the enemy GK is furthest away from
                                 if (disTop >= disBot)
@@ -190,10 +206,10 @@ namespace TeamName
                             else
                             {
                                 // Do stuff
-                                var gKY = (ball.Position.Y/Field.Borders.Bottom.Y)*
+                                var gKy = (ball.Position.Y/Field.Borders.Bottom.Y)*
                                           (Field.MyGoal.Bottom.Y - Field.MyGoal.Top.Y) + Field.MyGoal.Top.Y;
                                 
-                                player.ActionGo(new Vector(_goalKeeperMaxX, gKY));
+                                player.ActionGo(new Vector(_goalKeeperMaxX, gKy));
                             }
                             break;
                         case PlayerType.LeftDefender:
@@ -202,7 +218,15 @@ namespace TeamName
                                 if (player.GetDistanceTo(ball) < ball.GetDistanceTo(closestEnemy)
                                 && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.RightDefender).GetDistanceTo(ball)))
                                 {
-                                    player.ActionGo(ball);
+                                    if (ball.Owner == null)
+                                    {
+                                        player.ActionGo(new Vector(ball.Position.X + ball.Velocity.X, ball.Position.Y + BallTrajectoryYPos(ball, ball.Position.X)));
+                                    }
+                                    else 
+                                    {
+                                        var enemy = ball.GetClosest(enemyTeam);
+                                        player.ActionGo(new Vector(enemy.Position.X + enemy.Velocity.X, enemy.Position.Y + EnemyTrajectoryYPos(enemy, enemy.Position.X)));
+                                    }
                                 }
                                 else if (Field.MyGoal.Bottom.Y > BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
                                     && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.RightDefender).GetDistanceTo(ball)))
@@ -233,7 +257,15 @@ namespace TeamName
                                 if (player.GetDistanceTo(ball) < ball.GetDistanceTo(closestEnemy)
                                 && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.LeftDefender).GetDistanceTo(ball)))
                                 {
-                                    player.ActionGo(ball);
+                                    if (ball.Owner == null)
+                                    {
+                                        player.ActionGo(new Vector(ball.Position.X + ball.Velocity.X, ball.Position.Y + BallTrajectoryYPos(ball, ball.Position.X)));
+                                    }
+                                    else
+                                    {
+                                        var enemy = ball.GetClosest(enemyTeam);
+                                        player.ActionGo(new Vector(enemy.Position.X + enemy.Velocity.X, enemy.Position.Y + EnemyTrajectoryYPos(enemy, enemy.Position.X)));
+                                    }
                                 }
                                 else if (Field.MyGoal.Bottom.Y > BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
                                     && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.LeftDefender).GetDistanceTo(ball)))
@@ -299,6 +331,32 @@ namespace TeamName
             }
         }
 
+        private void UpdateFreePlayers(Team myTeam, Team enemyTeam, Player player)
+        {
+            _freeForwards.Clear();
+            _freeDefenders.Clear();
+
+            foreach (var playerF in myTeam.Players)
+            {
+                if (CheckIfPlayerIsFree(player, playerF, enemyTeam, 100))
+                {
+                    switch (playerF.PlayerType)
+                    {
+                        case PlayerType.LeftForward:
+                        case PlayerType.CenterForward:
+                        case PlayerType.RightForward:
+                            _freeForwards.Add(playerF);
+                            break;
+                        case PlayerType.LeftDefender:
+                        case PlayerType.RightDefender:
+                        case PlayerType.Keeper:
+                            _freeDefenders.Add(playerF);
+                            break;
+                    }
+                }
+            }
+        }
+
         private float BallTrajectoryYPos(Ball ball, float x)
         {
             return (ball.Velocity.Y / ball.Velocity.X)*(x-ball.Position.X) + ball.Position.Y;
@@ -321,6 +379,11 @@ namespace TeamName
 
         private bool CheckIfPlayerIsFree(Player myPlayer, Player targetPlayer, Team enemyTeam, double radius)
         {
+            if (myPlayer == targetPlayer)
+            {
+                return false;
+            }
+
             var line = new Line
             {
                 X1 = myPlayer.Position.X,

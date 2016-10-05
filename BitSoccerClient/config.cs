@@ -7,22 +7,22 @@ namespace Client.Properties
 {
     [GeneratedCode("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "10.0.0.0")]
     [CompilerGenerated]
-    internal sealed class config : ApplicationSettingsBase
+    internal sealed class Config : ApplicationSettingsBase
     {
-        private static config _config = (config)SettingsBase.Synchronized((SettingsBase)new config());
+        private static Config _config = (Config)SettingsBase.Synchronized((SettingsBase)new Config());
 
-        public static config Default
+        public static Config Default
         {
             get
             {
-                return config._config;
+                return Config._config;
             }
         }
 
         [UserScopedSetting]
         [DebuggerNonUserCode]
         [DefaultSettingValue("")]
-        public string team1Path
+        public string Team1Path
         {
             get
             {
@@ -37,7 +37,7 @@ namespace Client.Properties
         [DefaultSettingValue("")]
         [DebuggerNonUserCode]
         [UserScopedSetting]
-        public string team2Path
+        public string Team2Path
         {
             get
             {
@@ -67,7 +67,7 @@ namespace Client.Properties
         [DefaultSettingValue("False")]
         [DebuggerNonUserCode]
         [UserScopedSetting]
-        public bool showPrompt
+        public bool ShowPrompt
         {
             get
             {
