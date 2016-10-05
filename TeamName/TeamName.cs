@@ -40,13 +40,13 @@ namespace TeamName
                     switch (player.PlayerType)
                     {
                         case PlayerType.Keeper:
-                            player.ActionShoot(Field.Borders.Top);
+                            player.ActionShootGoal();
                             break;
                         case PlayerType.LeftDefender:
-                            break;
-                        case PlayerType.CenterForward:
+                            player.ActionShoot(Field.Borders.Top);
                             break;
                         case PlayerType.RightDefender:
+                            player.ActionShoot(Field.Borders.Bottom);
                             break;
                         case PlayerType.LeftForward:
                             if (player.GetDistanceTo(Field.EnemyGoal) < 300)
@@ -82,6 +82,8 @@ namespace TeamName
                             }
                             
                             break;
+                        case PlayerType.CenterForward:
+                            break;
                         case PlayerType.RightForward:
                             break;
                         default:
@@ -90,9 +92,13 @@ namespace TeamName
                     }
                 }
 
-                else if (player.CanPickUpBall(ball) && player.PlayerType == PlayerType.Keeper) // Picks up the ball if posible.
+                else if (player.CanPickUpBall(ball)) // Picks up the ball if posible.
                 {
-                    player.ActionPickUpBall();
+                    if (player.PlayerType == PlayerType.Keeper || player.PlayerType == PlayerType.LeftDefender || player.PlayerType == PlayerType.RightDefender)
+                    {
+                        player.ActionPickUpBall();
+                    }
+                    
                 }
 
                 // Tackles any enemy that is close.
