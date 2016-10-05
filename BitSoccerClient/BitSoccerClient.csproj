@@ -66,6 +66,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="TeamSlutbossen">
+      <HintPath>..\..\..\..\Users\usr\Downloads\TeamSlutbossen\TeamSlutbossen.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />

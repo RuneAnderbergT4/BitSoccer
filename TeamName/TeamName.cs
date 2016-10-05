@@ -102,19 +102,13 @@ namespace TeamName
                 }
 
                 // Tackles any enemy that is close.
-                else if ((player.CanTackle(closestEnemy) && player.PlayerType == PlayerType.LeftDefender) ||
-                         (player.CanTackle(closestEnemy) && player.PlayerType == PlayerType.CenterForward) ||
-                         (player.CanTackle(closestEnemy) && player.PlayerType == PlayerType.RightDefender))
+                else if (player.CanTackle(closestEnemy))
                 {
                     player.ActionTackle(closestEnemy);
                 }
 
                 else // If the player cannot do anything urgently usefull, move to a good position.
                 {
-                    //if (player == ball.GetClosest(myTeam))
-                    //{
-                    //    player.ActionGo(ball);
-                    //}
                     
                     switch (player.PlayerType)
                     {
@@ -134,7 +128,12 @@ namespace TeamName
                                 
                             break;
                         case PlayerType.LeftDefender:
-                            if (Field.MyGoal.Bottom.Y > BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
+                            if (player.GetDistanceTo(ball) < ball.GetDistanceTo(closestEnemy)
+                                && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.RightDefender).GetDistanceTo(ball)))
+                            {
+                                player.ActionGo(ball);
+                            }
+                            else if (Field.MyGoal.Bottom.Y > BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
                                 && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.RightDefender).GetDistanceTo(ball)))
                             {
                                 player.ActionGo(DefenderPosition(ball));
@@ -149,7 +148,12 @@ namespace TeamName
                             }
                             break;
                         case PlayerType.RightDefender:
-                            if (Field.MyGoal.Bottom.Y> BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
+                            if (player.GetDistanceTo(ball) < ball.GetDistanceTo(closestEnemy)
+                                && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.LeftDefender).GetDistanceTo(ball)))
+                            {
+                                player.ActionGo(ball);
+                            }
+                            else if (Field.MyGoal.Bottom.Y> BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
                                 && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.LeftDefender).GetDistanceTo(ball)))
                             {
                                 player.ActionGo(DefenderPosition(ball));

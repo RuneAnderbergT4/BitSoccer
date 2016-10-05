@@ -134,3 +134,4 @@ D:\Git\RuneAnderbergT4\BitSoccer\BitSoccerClient\bin\Windows\x86\Debug\SharpDX.D
 D:\Git\RuneAnderbergT4\BitSoccer\BitSoccerClient\obj\x86\Debug\BitSoccerClient.csprojResolveAssemblyReference.cache
 D:\Git\RuneAnderbergT4\BitSoccer\BitSoccerClient\obj\x86\Debug\DevPromtDialog.resources
 D:\Git\RuneAnderbergT4\BitSoccer\BitSoccerClient\obj\x86\Debug\BitSoccerClient.csproj.GenerateResource.Cache
+C:\Git\RuneAnderbergT4\BitSoccer\BitSoccerClient\bin\Windows\x86\Debug\TeamSlutbossen.dll
