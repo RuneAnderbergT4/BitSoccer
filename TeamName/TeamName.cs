@@ -225,7 +225,7 @@ namespace TeamName
                     {
                         case PlayerType.Keeper:
                             if (Field.MyGoal.Bottom.Y > BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
-                                && _myTeamLast && ball.Position.X < Field.Borders.Width / 2)
+                                && _myTeamLast && ball.Position.X < Field.Borders.Width / 4)
                             {
                                 player.ActionGo(GoaliePosition(ball));
                             }
