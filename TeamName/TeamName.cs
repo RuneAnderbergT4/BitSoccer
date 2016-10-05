@@ -416,38 +416,38 @@ namespace TeamName
             Point myPoint = new Point(myPlayer.Position.X, myPlayer.Position.Y);
             Point targetPoint = new Point(targetPlayer.Position.X, targetPlayer.Position.Y);
             
-            var side = radius/Math.Pow(2, 0.5);
+            //var side = radius/Math.Pow(2, 0.5);
 
             var isFree = true;
 
             foreach (var player in enemyTeam.Players)
             {
-                var enemyX = player.Position.X;
-                var enemyY = player.Position.Y;
+                //var enemyX = player.Position.X;
+                //var enemyY = player.Position.Y;
 
-                //var octagon = new Polygon();
-                //octagon.Points.Add(new Point(enemyX, enemyY - radius));
-                //octagon.Points.Add(new Point(enemyX - side, enemyY - side));
-                //octagon.Points.Add(new Point(enemyX - radius, enemyY));
-                //octagon.Points.Add(new Point(enemyX - side, enemyY + side));
-                //octagon.Points.Add(new Point(enemyX, enemyY + radius));
-                //octagon.Points.Add(new Point(enemyX + side, enemyY + side));
-                //octagon.Points.Add(new Point(enemyX + radius, enemyY));
-                //octagon.Points.Add(new Point(enemyX + side, enemyY - side));
+                ////var octagon = new Polygon();
+                ////octagon.Points.Add(new Point(enemyX, enemyY - radius));
+                ////octagon.Points.Add(new Point(enemyX - side, enemyY - side));
+                ////octagon.Points.Add(new Point(enemyX - radius, enemyY));
+                ////octagon.Points.Add(new Point(enemyX - side, enemyY + side));
+                ////octagon.Points.Add(new Point(enemyX, enemyY + radius));
+                ////octagon.Points.Add(new Point(enemyX + side, enemyY + side));
+                ////octagon.Points.Add(new Point(enemyX + radius, enemyY));
+                ////octagon.Points.Add(new Point(enemyX + side, enemyY - side));
 
-                List<Point> octagon = new List<Point>
-                {
-                    new Point(enemyX, enemyY - radius),
-                    new Point(enemyX - side, enemyY - side),
-                    new Point(enemyX - radius, enemyY),
-                    new Point(enemyX - side, enemyY + side),
-                    new Point(enemyX, enemyY + radius),
-                    new Point(enemyX + side, enemyY + side),
-                    new Point(enemyX + radius, enemyY),
-                    new Point(enemyX + side, enemyY - side)
-                };
+                //List<Point> octagon = new List<Point>
+                //{
+                //    new Point(enemyX, enemyY - radius),
+                //    new Point(enemyX - side, enemyY - side),
+                //    new Point(enemyX - radius, enemyY),
+                //    new Point(enemyX - side, enemyY + side),
+                //    new Point(enemyX, enemyY + radius),
+                //    new Point(enemyX + side, enemyY + side),
+                //    new Point(enemyX + radius, enemyY),
+                //    new Point(enemyX + side, enemyY - side)
+                //};
 
-                if (CheckIntersection(myPoint, targetPoint, octagon))
+                if (CheckIntersection(new Point(player.Position.X, player.Position.Y), radius, myPoint, targetPoint))
                 {
                     isFree = false;
                 }
@@ -455,20 +455,47 @@ namespace TeamName
             return isFree;
         }
 
-        private bool CheckIntersection(Point point1, Point point2, IEnumerable<Point> octagon)
+        private bool CheckIntersection(Point circlePos, float circleRadius, Point point1, Point point2)
         {
-            if (octagon == null || !octagon.Any()) return false;
-            var side = GetSide(point1, point2, octagon.First());
-            return
-                side == 0
-                    ? true
-                    : octagon.All(x => GetSide(point1, point2, x) == side);
+            float dx, dy, A, B, C, det, t;
+
+            float cx = (float) circlePos.X;
+            float cy = (float) circlePos.Y;
+            
+            dx = (float) (point2.X - point1.X);
+            dy = (float) (point2.Y - point1.Y);
+
+            A = dx * dx + dy * dy;
+            B = (float) (2 * (dx * (point1.X - cx) + dy * (point1.Y - cy)));
+            C = (float) ((point1.X - cx) * (point1.X - cx) + (point1.Y - cy) * (point1.Y - cy) - circleRadius * circleRadius);
+
+            det = B * B - 4 * A * C;
+            if ((A <= 0.0000001) || (det < 0))
+            {
+                // No intersections.
+                return false;
+            }
+            else
+            {
+                // Intersections.
+                return true;
+            }
         }
 
-        public int GetSide(Point lineP1, Point lineP2, Point queryP)
-        {
-            return Math.Sign((lineP2.X - lineP1.X) * (queryP.Y - lineP1.Y) - (lineP2.Y - lineP1.Y) * (queryP.X - lineP1.X));
-        }
+        //private bool CheckIntersection(Point point1, Point point2, IEnumerable<Point> octagon)
+        //{
+        //    if (octagon == null || !octagon.Any()) return false;
+        //    var side = GetSide(point1, point2, octagon.First());
+        //    return
+        //        side == 0
+        //            ? true
+        //            : octagon.All(x => GetSide(point1, point2, x) == side);
+        //}
+
+        //public int GetSide(Point lineP1, Point lineP2, Point queryP)
+        //{
+        //    return Math.Sign((lineP2.X - lineP1.X) * (queryP.Y - lineP1.Y) - (lineP2.Y - lineP1.Y) * (queryP.X - lineP1.X));
+        //}
 
         //public static bool IsOutside(Point lineP1, Point lineP2, IEnumerable<Point> region)
         //{
