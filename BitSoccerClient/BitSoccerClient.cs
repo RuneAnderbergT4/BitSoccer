@@ -26,7 +26,7 @@ namespace BitSoccerClient
         private BallInfo _ballInfo;
         public GameState gameState;
 
-        private const string _title = "CloudBall";
+        private const string _title = "BitSoccer";
         private int _matchLength = Constants.GameEngineMatchLength;
         private IGameEngine _gameEngine;
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>D:/Git/RuneAnderbergT4/BitSoccer/BitSoccerClient/Content/ball.png</SourceFile>
-  <SourceTime>2016-10-04T18:51:24.1942147+02:00</SourceTime>
-  <DestFile>D:/Git/RuneAnderbergT4/BitSoccer/BitSoccerClient/Content/bin/Windows/ball.xnb</DestFile>
-  <DestTime>2016-10-04T18:56:10.4418377+02:00</DestTime>
+  <SourceFile>C:/Git/RuneAnderbergT4/BitSoccer/BitSoccerClient/Content/ball.png</SourceFile>
+  <SourceTime>2016-02-04T14:32:38.1544124+01:00</SourceTime>
+  <DestFile>C:/Git/RuneAnderbergT4/BitSoccer/BitSoccerClient/Content/bin/Windows/ball.xnb</DestFile>
+  <DestTime>2016-10-05T08:34:04.6866475+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

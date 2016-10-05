@@ -14,6 +14,7 @@ namespace TeamName
         private static float _goalPostTop = Field.MyGoal.Top.Y;
         private static float _goalPostBottom = Field.MyGoal.Bottom.Y;
         private static float _goalKeeperMaxX = Field.MyGoal.Center.X + 50;
+        private static float _defenderMaxX = Field.MyGoal.Center.X + 150;
 
         public void Action(Team myTeam, Team enemyTeam, Ball ball, MatchInfo matchInfo)
         {
@@ -39,6 +40,7 @@ namespace TeamName
                     switch (player.PlayerType)
                     {
                         case PlayerType.Keeper:
+                            player.ActionShoot(Field.Borders.Top);
                             break;
                         case PlayerType.LeftDefender:
                             break;
@@ -88,7 +90,7 @@ namespace TeamName
                     }
                 }
 
-                else if (player.CanPickUpBall(ball)) // Picks up the ball if posible.
+                else if (player.CanPickUpBall(ball) && player.PlayerType == PlayerType.Keeper) // Picks up the ball if posible.
                 {
                     player.ActionPickUpBall();
                 }
@@ -103,35 +105,61 @@ namespace TeamName
 
                 else // If the player cannot do anything urgently usefull, move to a good position.
                 {
-                    if (player == ball.GetClosest(myTeam))
-                    {
-                        player.ActionGo(ball);
-                    }
+                    //if (player == ball.GetClosest(myTeam))
+                    //{
+                    //    player.ActionGo(ball);
+                    //}
                     
-                    else switch (player.PlayerType)
+                    switch (player.PlayerType)
                     {
                         case PlayerType.Keeper:
-                                // 
-                                //if ()
-                                //{
-                                //    // player.ActionGo(new Vector(50, Math.Max(Math.Min(ball.Position.Y, Field.MyGoal.Bottom.Y), Field.MyGoal.Top.Y)));
-
-                                //}
-                                //else
-                                //{
+                            if (Field.MyGoal.Bottom.Y > BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y)
+                            {
+                                player.ActionGo(GoaliePosition(ball));
+                            }
+                            else
+                            {
+                                // Do stuff
+                                var gKY = (ball.Position.Y/Field.Borders.Bottom.Y)*
+                                          (Field.MyGoal.Bottom.Y - Field.MyGoal.Top.Y) + Field.MyGoal.Top.Y;
                                 
-                                //}
-                            
+                                player.ActionGo(new Vector(_goalKeeperMaxX, gKY));
+                            }
+                                
                             break;
                         case PlayerType.LeftDefender:
+                            if (Field.MyGoal.Bottom.Y > BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
+                                && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.RightDefender).GetDistanceTo(ball)))
+                            {
+                                player.ActionGo(DefenderPosition(ball));
+                            }
+                            else
+                            {
+                                // Do stuff
+                                var dY = (ball.Position.Y / Field.Borders.Bottom.Y) *
+                                          (Field.MyGoal.Bottom.Y - Field.MyGoal.Top.Y) + Field.MyGoal.Top.Y;
+
+                                player.ActionGo(new Vector(_defenderMaxX, dY - 100));
+                            }
+                            break;
+                        case PlayerType.RightDefender:
+                            if (Field.MyGoal.Bottom.Y> BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
+                                && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.LeftDefender).GetDistanceTo(ball)))
+                            {
+                                player.ActionGo(DefenderPosition(ball));
+                            }
+                            else
+                            {
+                                // Do stuff
+                                var dY = (ball.Position.Y / Field.Borders.Bottom.Y) *
+                                          (Field.MyGoal.Bottom.Y - Field.MyGoal.Top.Y) + Field.MyGoal.Top.Y;
+
+                                player.ActionGo(new Vector(_defenderMaxX, dY + 100));
+                            }
                             break;
                         case PlayerType.CenterForward:
                             break;
-                        case PlayerType.RightDefender:
-                            player.ActionGo(Field.EnemyGoal);
-                            break;
                         case PlayerType.LeftForward:
-                            player.ActionGo(ball);
                             break;
                         case PlayerType.RightForward:
                             break;
@@ -143,24 +171,19 @@ namespace TeamName
             }
         }
 
-        private float ballTrajectoryYPos(Ball ball, float x)
+        private float BallTrajectoryYPos(Ball ball, float x)
         {
             return (ball.Velocity.Y / ball.Velocity.X)*(x-ball.Position.X) + ball.Position.Y;
         }
 
-        private IPosition goaliePosition(Ball ball)
+        private IPosition GoaliePosition(Ball ball)
         {
-            return new Vector();
+            return new Vector(_goalKeeperMaxX, BallTrajectoryYPos(ball, _goalKeeperMaxX));
         }
 
-        private IPosition ballPosToTeamPos(IPosition pos)
+        private IPosition DefenderPosition(Ball ball)
         {
-            return new Vector(Field.Borders.Width/2 - pos.Position.X, Field.Borders.Height/2 - pos.Position.Y);
-        }
-
-        private IPosition teamPosToBallPos(IPosition pos)
-        {
-            return new Vector(Field.Borders.Width / 2 - ball.Position.X, Field.Borders.Height / 2 - ball.Position.Y);
+            return new Vector(_defenderMaxX, BallTrajectoryYPos(ball, _defenderMaxX));
         }
     }
 }
