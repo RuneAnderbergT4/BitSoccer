@@ -225,7 +225,7 @@ namespace TeamName
                     {
                         case PlayerType.Keeper:
                             if (Field.MyGoal.Bottom.Y > BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
-                                && _myTeamLast && ball.Position.X < Field.Borders.Width / 4)
+                                && !_myTeamLast && ball.Position.X < Field.Borders.Width / 2)
                             {
                                 player.ActionGo(GoaliePosition(ball));
                             }
@@ -239,14 +239,14 @@ namespace TeamName
                             }
                             break;
                         case PlayerType.LeftDefender:
-                            if (_myTeamLast)
+                            if (!_myTeamLast)
                             {
                                 if (player.GetDistanceTo(ball) < ball.GetDistanceTo(closestEnemy)
                                 && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.RightDefender).GetDistanceTo(ball)))
                                 {
                                     if (ball.Owner == null)
                                     {
-                                        player.ActionGo(new Vector(ball.Position.X + ball.Velocity.X, ball.Position.Y + BallTrajectoryYPos(ball, ball.Position.X)));
+                                        player.ActionGo(DefenderPosition(ball));
                                     }
                                     else
                                     {
@@ -278,14 +278,14 @@ namespace TeamName
                             }
                             break;
                         case PlayerType.RightDefender:
-                            if (_myTeamLast)
+                            if (!_myTeamLast)
                             {
                                 if (player.GetDistanceTo(ball) < ball.GetDistanceTo(closestEnemy)
                                 && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.LeftDefender).GetDistanceTo(ball)))
                                 {
                                     if (ball.Owner == null)
                                     {
-                                        player.ActionGo(new Vector(ball.Position.X + ball.Velocity.X, ball.Position.Y + BallTrajectoryYPos(ball, ball.Position.X)));
+                                        player.ActionGo(DefenderPosition(ball));
                                     }
                                     else
                                     {
