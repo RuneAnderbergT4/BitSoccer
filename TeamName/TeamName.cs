@@ -23,7 +23,7 @@ namespace TeamName
         private float _defenderMaxX = Field.MyGoal.Center.X + 100;
         private List<Player> _freeForwards = new List<Player>();
         private List<Player> _freeDefenders = new List<Player>();
-        private Random _random = new Random();
+        private static Random _random = new Random();
         private List<IPosition> _openPositions = new List<IPosition>();
         private List<IPosition> _openForwardPositions = new List<IPosition>();
         private int _nrOfWidthBoxes = 20;
@@ -439,6 +439,7 @@ namespace TeamName
             {
                 if ((player.Position.X >= xMin && player.Position.X <= xMax) && (player.Position.Y >= yMin && player.Position.Y <= yMax))
                 {
+                    Debug.WriteLine("found enemy");
                     return true;
                 }
             }
