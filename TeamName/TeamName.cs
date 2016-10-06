@@ -77,7 +77,7 @@ namespace TeamName
                             }
                             break;
                         case PlayerType.LeftDefender:
-                            UpdateFreePlayers(myTeam, enemyTeam, player, 100);
+                            UpdateFreePlayers(myTeam, enemyTeam, player, 50);
 
                             if (_freeForwards.Count > 0)
                             {
@@ -93,7 +93,7 @@ namespace TeamName
                             }
                             break;
                         case PlayerType.RightDefender:
-                            UpdateFreePlayers(myTeam, enemyTeam, player, 100);
+                            UpdateFreePlayers(myTeam, enemyTeam, player, 50);
 
                             if (_freeForwards.Count > 0)
                             {
@@ -132,9 +132,9 @@ namespace TeamName
                                     player.ActionShootGoal();
                                 }
                             }
-                            else if (player.GetDistanceTo(closestEnemy) < 200)
+                            else if (player.GetDistanceTo(closestEnemy) < 300)
                             {
-                                UpdateFreePlayers(myTeam, enemyTeam, player, 150);
+                                UpdateFreePlayers(myTeam, enemyTeam, player, 50);
                                 if (_freeForwards.Count > 0)
                                 {
                                     player.ActionShoot(_freeForwards[_random.Next(_freeForwards.Count)], 8);
@@ -178,9 +178,9 @@ namespace TeamName
                                     player.ActionShootGoal();
                                 }
                             }
-                            else if (player.GetDistanceTo(closestEnemy) < 200)
+                            else if (player.GetDistanceTo(closestEnemy) < 300)
                             {
-                                UpdateFreePlayers(myTeam, enemyTeam, player, 150);
+                                UpdateFreePlayers(myTeam, enemyTeam, player, 50);
                                 if (_freeForwards.Count > 0)
                                 {
                                     player.ActionShoot(_freeForwards[_random.Next(_freeForwards.Count)], 8);
@@ -223,9 +223,9 @@ namespace TeamName
                                     player.ActionShootGoal();
                                 }
                             }
-                            else if (player.GetDistanceTo(closestEnemy) < 200)
+                            else if (player.GetDistanceTo(closestEnemy) < 300)
                             {
-                                UpdateFreePlayers(myTeam, enemyTeam, player, 150);
+                                UpdateFreePlayers(myTeam, enemyTeam, player, 50);
                                 if (_freeForwards.Count > 0)
                                 {
                                     player.ActionShoot(_freeForwards[_random.Next(_freeForwards.Count)], 8);
@@ -267,7 +267,7 @@ namespace TeamName
                     {
                         case PlayerType.Keeper:
                             if (Field.MyGoal.Bottom.Y > BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
-                                && !_myTeamLast && ball.Owner == null && ball.Position.X < 400)
+                                && ball.Owner == null && ball.Position.X < 400)
                             {
                                 player.ActionGo(GoaliePosition(ball));
                             }
@@ -360,39 +360,42 @@ namespace TeamName
                             }
                             break;
                         case PlayerType.LeftForward:
-                            if (!_myTeamLast)
+                            if (!_myTeamLast && player == ball.GetClosest(myTeam))
                             {
                                 var bY = BallTrajectoryYPos(ball, ball.Position.X + ball.Velocity.X);
                                 player.ActionGo(new Vector(ball.Position.X + ball.Velocity.X, bY));
                             }
                             else
                             {
-                                // Get into position without nearby enemies
-                                player.ActionGo(randomForwardPos(enemyTeam));
+                                // Get into position (kinda)
+                                var pos = new Vector(myTeam.Players[4].Position.X + 200, myTeam.Players[4].Position.Y - 200);
+                                player.ActionGo(pos);
                             }
                             break;
                         case PlayerType.CenterForward:
-                            if (!_myTeamLast)
+                            if (!_myTeamLast && player == ball.GetClosest(myTeam))
                             {
                                 var bY = BallTrajectoryYPos(ball, ball.Position.X + ball.Velocity.X);
                                 player.ActionGo(new Vector(ball.Position.X + ball.Velocity.X, bY));
                             }
                             else
                             {
-                                // Get into position without nearby enemies
-                                player.ActionGo(randomForwardPos(enemyTeam));
+                                // Get into position (kinda)
+                                var bY = BallTrajectoryYPos(ball, ball.Position.X + ball.Velocity.X);
+                                player.ActionGo(new Vector(ball.Position.X + ball.Velocity.X, bY));
                             }
                             break;
                         case PlayerType.RightForward:
-                            if (!_myTeamLast)
+                            if (!_myTeamLast && player == ball.GetClosest(myTeam))
                             {
                                 var bY = BallTrajectoryYPos(ball, ball.Position.X + ball.Velocity.X);
                                 player.ActionGo(new Vector(ball.Position.X + ball.Velocity.X, bY));
                             }
                             else
                             {
-                                // Get into position without nearby enemies
-                                player.ActionGo(randomForwardPos(enemyTeam));
+                                // Get into position (kinda)
+                                var pos = new Vector(myTeam.Players[4].Position.X + 200, myTeam.Players[4].Position.Y + 200);
+                                player.ActionGo(pos);
                             }
                             break;
                         default:
@@ -402,62 +405,61 @@ namespace TeamName
             }
         }
 
-        private IPosition randomForwardPos(Team enemyTeam)
-        {
-            UpdateOpenPositions(enemyTeam);
-            UpdateOpenForwardPositions();
-            return _openForwardPositions[_random.Next(_openForwardPositions.Count)];
-        }
+        //private IPosition randomForwardPos(Team enemyTeam)
+        //{
+        //    UpdateOpenPositions(enemyTeam);
+        //    UpdateOpenForwardPositions();
+        //    return _openForwardPositions[_random.Next(_openForwardPositions.Count)];
+        //}
 
-        private void UpdateOpenPositions(Team enemyTeam)
-        {
-            _openPositions.Clear();
+        //private void UpdateOpenPositions(Team enemyTeam)
+        //{
+        //    _openPositions.Clear();
 
-            var width = Field.Borders.Width / _nrOfWidthBoxes;
-            var height = Field.Borders.Height / _nrOfHeightBoxes;
+        //    var width = Field.Borders.Width / _nrOfWidthBoxes;
+        //    var height = Field.Borders.Height / _nrOfHeightBoxes;
 
-            float currentWidth = 0;
-            float currentHeight = 0;
+        //    float currentWidth = 0;
+        //    float currentHeight = 0;
 
-            for (int x = 0; x < _nrOfWidthBoxes; x++)
-            {
-                for (int y = 0; y < _nrOfHeightBoxes; y++)
-                {
-                    if (!AreaContainsPlayer(enemyTeam, currentWidth, currentWidth + width, currentHeight, currentHeight + height))
-                    {
-                        _openPositions.Add(new Vector(currentWidth + width / 2, currentHeight + height / 2));
-                    }
-                    currentHeight += height;
-                }
-                currentWidth += width;
-            }
-        }
+        //    for (int x = 0; x < _nrOfWidthBoxes; x++)
+        //    {
+        //        for (int y = 0; y < _nrOfHeightBoxes; y++)
+        //        {
+        //            if (!AreaContainsPlayer(enemyTeam, currentWidth, currentWidth + width, currentHeight, currentHeight + height))
+        //            {
+        //                _openPositions.Add(new Vector(currentWidth + width / 2, currentHeight + height / 2));
+        //            }
+        //            currentHeight += height;
+        //        }
+        //        currentWidth += width;
+        //    }
+        //}
 
-        private bool AreaContainsPlayer(Team enemyTeam, float xMin, float xMax, float yMin, float yMax)
-        {
-            foreach (var player in enemyTeam.Players)
-            {
-                if ((player.Position.X >= xMin && player.Position.X <= xMax) && (player.Position.Y >= yMin && player.Position.Y <= yMax))
-                {
-                    Debug.WriteLine("found enemy");
-                    return true;
-                }
-            }
-            return false;
-        }
+        //private bool AreaContainsPlayer(Team enemyTeam, float xMin, float xMax, float yMin, float yMax)
+        //{
+        //    foreach (var player in enemyTeam.Players)
+        //    {
+        //        if ((player.Position.X >= xMin && player.Position.X <= xMax) && (player.Position.Y >= yMin && player.Position.Y <= yMax))
+        //        {
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
 
-        private void UpdateOpenForwardPositions()
-        {
-            _openForwardPositions.Clear();
+        //private void UpdateOpenForwardPositions()
+        //{
+        //    _openForwardPositions.Clear();
 
-            foreach (var pos in _openPositions)
-            {
-                if (pos.Position.X > 500)
-                {
-                    _openForwardPositions.Add(pos);
-                }
-            }
-        }
+        //    foreach (var pos in _openPositions)
+        //    {
+        //        if (pos.Position.X > 500)
+        //        {
+        //            _openForwardPositions.Add(pos);
+        //        }
+        //    }
+        //}
 
         private void UpdateFreePlayers(Team myTeam, Team enemyTeam, Player player, float radius)
         {
