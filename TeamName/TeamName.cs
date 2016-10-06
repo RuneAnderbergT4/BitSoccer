@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -8,20 +9,25 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Common;
+using Microsoft.Win32;
 using Vector = Common.Vector;
 
 namespace TeamName
 {
     public class TeamName : ITeam
     {
-        private bool _myTeamLast;
+        private bool _myTeamLast = false;
         private float _goalPostTop = Field.MyGoal.Top.Y;
         private float _goalPostBottom = Field.MyGoal.Bottom.Y;
-        private float _goalKeeperMaxX = Field.MyGoal.Center.X + 20;
-        private float _defenderMaxX = Field.MyGoal.Center.X + 200;
+        private float _goalKeeperMaxX = Field.MyGoal.Center.X + 25;
+        private float _defenderMaxX = Field.MyGoal.Center.X + 100;
         private List<Player> _freeForwards = new List<Player>();
         private List<Player> _freeDefenders = new List<Player>();
         private Random _random = new Random();
+        private List<IPosition> _openPositions = new List<IPosition>();
+        private List<IPosition> _openForwardPositions = new List<IPosition>();
+        private int _nrOfWidthBoxes = 20;
+        private int _nrOfHeightBoxes = 20;
 
         public void Action(Team myTeam, Team enemyTeam, Ball ball, MatchInfo matchInfo)
         {
@@ -39,11 +45,11 @@ namespace TeamName
 
             if (ball.Position.X > 800 && _myTeamLast)
             {
-                _defenderMaxX = 400;
+                _defenderMaxX = Field.MyGoal.Center.X + 400;
             }
             else
             {
-                _defenderMaxX = 200;
+                _defenderMaxX = Field.MyGoal.Center.X + 100;
             }
 
             foreach (Player player in myTeam.Players)
@@ -79,7 +85,7 @@ namespace TeamName
                             }
                             else if (_freeDefenders.Count > 0)
                             {
-                                player.ActionShoot(_freeDefenders[_random.Next(_freeDefenders.Count)], 8);
+                                player.ActionShoot(_freeDefenders[_random.Next(_freeDefenders.Count)], 6);
                             }
                             else
                             {
@@ -95,7 +101,7 @@ namespace TeamName
                             }
                             else if (_freeDefenders.Count > 0)
                             {
-                                player.ActionShoot(_freeDefenders[_random.Next(_freeDefenders.Count)], 8);
+                                player.ActionShoot(_freeDefenders[_random.Next(_freeDefenders.Count)], 6);
                             }
                             else
                             {
@@ -126,9 +132,21 @@ namespace TeamName
                                     player.ActionShootGoal();
                                 }
                             }
-                            else if (player.GetDistanceTo(closestEnemy) < 100)
+                            else if (player.GetDistanceTo(closestEnemy) < 200)
                             {
-                                player.ActionShoot(player.GetClosest(myTeam), 6);
+                                UpdateFreePlayers(myTeam, enemyTeam, player, 150);
+                                if (_freeForwards.Count > 0)
+                                {
+                                    player.ActionShoot(_freeForwards[_random.Next(_freeForwards.Count)], 8);
+                                }
+                                else if (_freeDefenders.Count > 0)
+                                {
+                                    player.ActionShoot(_freeDefenders[_random.Next(_freeDefenders.Count)], 8);
+                                }
+                                else
+                                {
+                                    player.ActionShootGoal();
+                                }
                             }
                             else
                             {
@@ -160,9 +178,21 @@ namespace TeamName
                                     player.ActionShootGoal();
                                 }
                             }
-                            else if (player.GetDistanceTo(closestEnemy) < 100)
+                            else if (player.GetDistanceTo(closestEnemy) < 200)
                             {
-                                player.ActionShoot(player.GetClosest(myTeam), 6);
+                                UpdateFreePlayers(myTeam, enemyTeam, player, 150);
+                                if (_freeForwards.Count > 0)
+                                {
+                                    player.ActionShoot(_freeForwards[_random.Next(_freeForwards.Count)], 8);
+                                }
+                                else if (_freeDefenders.Count > 0)
+                                {
+                                    player.ActionShoot(_freeDefenders[_random.Next(_freeDefenders.Count)], 8);
+                                }
+                                else
+                                {
+                                    player.ActionShootGoal();
+                                }
                             }
                             else
                             {
@@ -193,9 +223,21 @@ namespace TeamName
                                     player.ActionShootGoal();
                                 }
                             }
-                            else if (player.GetDistanceTo(closestEnemy) < 100)
+                            else if (player.GetDistanceTo(closestEnemy) < 200)
                             {
-                                player.ActionShoot(player.GetClosest(myTeam), 6);
+                                UpdateFreePlayers(myTeam, enemyTeam, player, 150);
+                                if (_freeForwards.Count > 0)
+                                {
+                                    player.ActionShoot(_freeForwards[_random.Next(_freeForwards.Count)], 8);
+                                }
+                                else if (_freeDefenders.Count > 0)
+                                {
+                                    player.ActionShoot(_freeDefenders[_random.Next(_freeDefenders.Count)], 8);
+                                }
+                                else
+                                {
+                                    player.ActionShootGoal();
+                                }
                             }
                             else
                             {
@@ -225,10 +267,9 @@ namespace TeamName
                     {
                         case PlayerType.Keeper:
                             if (Field.MyGoal.Bottom.Y > BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
-                                && !_myTeamLast && ball.Owner == null)
+                                && !_myTeamLast && ball.Owner == null && ball.Position.X < 400)
                             {
                                 player.ActionGo(GoaliePosition(ball));
-                                // && !_myTeamLast && ball.Position.X < Field.Borders.Width / 2
                             }
                             else
                             {
@@ -242,7 +283,14 @@ namespace TeamName
                         case PlayerType.LeftDefender:
                             if (!_myTeamLast)
                             {
-                                if (player.GetDistanceTo(ball) < ball.GetDistanceTo(closestEnemy))
+                                if (Field.MyGoal.Bottom.Y > BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
+                                    && ball.Owner == null)
+                                {
+                                    // && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.RightDefender).GetDistanceTo(ball)) 
+                                    player.ActionGo(DefenderPosition(ball));
+                                }
+                                else if (player.GetDistanceTo(ball) < myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.RightDefender).GetDistanceTo(ball)
+                                    && player.GetDistanceTo(ball) < ball.GetDistanceTo(ball.GetClosest(enemyTeam)))
                                 {
                                     if (ball.Owner == null)
                                     {
@@ -250,14 +298,8 @@ namespace TeamName
                                     }
                                     else
                                     {
-                                        var enemy = ball.GetClosest(enemyTeam);
-                                        player.ActionGo(new Vector(enemy.Position.X + enemy.Velocity.X, enemy.Position.Y + EnemyTrajectoryYPos(enemy, enemy.Position.X)));
+                                        player.ActionGo(closestEnemy);
                                     }
-                                }
-                                else if (Field.MyGoal.Bottom.Y > BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
-                                    && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.RightDefender).GetDistanceTo(ball)) && ball.Owner == null)
-                                {
-                                    player.ActionGo(DefenderPosition(ball));
                                 }
                                 else
                                 {
@@ -280,7 +322,15 @@ namespace TeamName
                         case PlayerType.RightDefender:
                             if (!_myTeamLast)
                             {
-                                if (player.GetDistanceTo(ball) < ball.GetDistanceTo(closestEnemy))
+                                if (Field.MyGoal.Bottom.Y > BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
+                                    && ball.Owner == null)
+                                {
+                                    // && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.LeftDefender).GetDistanceTo(ball)) 
+                                    player.ActionGo(DefenderPosition(ball));
+                                }
+                                else if (player.GetDistanceTo(ball) <
+                                    myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.LeftDefender).GetDistanceTo(ball)
+                                    && player.GetDistanceTo(ball) < ball.GetDistanceTo(ball.GetClosest(enemyTeam)))
                                 {
                                     if (ball.Owner == null)
                                     {
@@ -288,14 +338,8 @@ namespace TeamName
                                     }
                                     else
                                     {
-                                        var enemy = ball.GetClosest(enemyTeam);
-                                        player.ActionGo(new Vector(enemy.Position.X + enemy.Velocity.X, enemy.Position.Y + EnemyTrajectoryYPos(enemy, enemy.Position.X)));
+                                        player.ActionGo(closestEnemy);
                                     }
-                                }
-                                else if (Field.MyGoal.Bottom.Y > BallTrajectoryYPos(ball, Field.MyGoal.Left.X) && BallTrajectoryYPos(ball, Field.MyGoal.Left.X) > Field.MyGoal.Top.Y
-                                    && player.GetDistanceTo(ball) < (myTeam.Players.Find(player1 => player1.PlayerType == PlayerType.LeftDefender).GetDistanceTo(ball)) && ball.Owner == null)
-                                {
-                                    player.ActionGo(DefenderPosition(ball));
                                 }
                                 else
                                 {
@@ -316,42 +360,100 @@ namespace TeamName
                             }
                             break;
                         case PlayerType.LeftForward:
-                            if (player == ball.GetClosest(myTeam))
+                            if (!_myTeamLast)
                             {
-                                player.ActionGo(ball);
+                                var bY = BallTrajectoryYPos(ball, ball.Position.X + ball.Velocity.X);
+                                player.ActionGo(new Vector(ball.Position.X + ball.Velocity.X, bY));
                             }
                             else
                             {
                                 // Get into position without nearby enemies
-                                player.ActionGo(Field.EnemyGoal);
+                                player.ActionGo(randomForwardPos(enemyTeam));
                             }
                             break;
                         case PlayerType.CenterForward:
-                            if (player == ball.GetClosest(myTeam))
+                            if (!_myTeamLast)
                             {
-                                player.ActionGo(ball);
+                                var bY = BallTrajectoryYPos(ball, ball.Position.X + ball.Velocity.X);
+                                player.ActionGo(new Vector(ball.Position.X + ball.Velocity.X, bY));
                             }
                             else
                             {
                                 // Get into position without nearby enemies
-                                player.ActionGo(Field.EnemyGoal);
+                                player.ActionGo(randomForwardPos(enemyTeam));
                             }
                             break;
                         case PlayerType.RightForward:
-                            if (player == ball.GetClosest(myTeam))
+                            if (!_myTeamLast)
                             {
-                                player.ActionGo(ball);
+                                var bY = BallTrajectoryYPos(ball, ball.Position.X + ball.Velocity.X);
+                                player.ActionGo(new Vector(ball.Position.X + ball.Velocity.X, bY));
                             }
                             else
                             {
                                 // Get into position without nearby enemies
-                                player.ActionGo(Field.EnemyGoal);
+                                player.ActionGo(randomForwardPos(enemyTeam));
                             }
                             break;
                         default:
-                            player.ActionShootGoal();
                             break;
                     }
+                }
+            }
+        }
+
+        private IPosition randomForwardPos(Team enemyTeam)
+        {
+            UpdateOpenPositions(enemyTeam);
+            UpdateOpenForwardPositions();
+            return _openForwardPositions[_random.Next(_openForwardPositions.Count)];
+        }
+
+        private void UpdateOpenPositions(Team enemyTeam)
+        {
+            _openPositions.Clear();
+
+            var width = Field.Borders.Width / _nrOfWidthBoxes;
+            var height = Field.Borders.Height / _nrOfHeightBoxes;
+
+            float currentWidth = 0;
+            float currentHeight = 0;
+
+            for (int x = 0; x < _nrOfWidthBoxes; x++)
+            {
+                for (int y = 0; y < _nrOfHeightBoxes; y++)
+                {
+                    if (!AreaContainsPlayer(enemyTeam, currentWidth, currentWidth + width, currentHeight, currentHeight + height))
+                    {
+                        _openPositions.Add(new Vector(currentWidth + width / 2, currentHeight + height / 2));
+                    }
+                    currentHeight += height;
+                }
+                currentWidth += width;
+            }
+        }
+
+        private bool AreaContainsPlayer(Team enemyTeam, float xMin, float xMax, float yMin, float yMax)
+        {
+            foreach (var player in enemyTeam.Players)
+            {
+                if ((player.Position.X >= xMin && player.Position.X <= xMax) && (player.Position.Y >= yMin && player.Position.Y <= yMax))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void UpdateOpenForwardPositions()
+        {
+            _openForwardPositions.Clear();
+
+            foreach (var pos in _openPositions)
+            {
+                if (pos.Position.X > 500)
+                {
+                    _openForwardPositions.Add(pos);
                 }
             }
         }
@@ -385,11 +487,19 @@ namespace TeamName
 
         private float BallTrajectoryYPos(Ball ball, float x)
         {
+            if (ball.Velocity.X == 0)
+            {
+                return ball.Position.Y;
+            }
             return (ball.Velocity.Y / ball.Velocity.X)*(x-ball.Position.X) + ball.Position.Y;
         }
 
         private float EnemyTrajectoryYPos(Player enemy, float x)
         {
+            if (enemy.Velocity.X == 0)
+            {
+                return enemy.Position.Y;
+            }
             return (enemy.Velocity.Y/enemy.Velocity.X)*(x - enemy.Position.X) + enemy.Position.Y;
         }
 
@@ -454,7 +564,7 @@ namespace TeamName
 
         private bool CheckIntersection(Point circlePos, float circleRadius, Point point1, Point point2)
         {
-            float dx, dy, A, B, C, det;
+            float dx, dy, a, b, c, det;
 
             float cx = (float) circlePos.X;
             float cy = (float) circlePos.Y;
@@ -462,12 +572,12 @@ namespace TeamName
             dx = (float) (point2.X - point1.X);
             dy = (float) (point2.Y - point1.Y);
 
-            A = dx * dx + dy * dy;
-            B = (float) (2 * (dx * (point1.X - cx) + dy * (point1.Y - cy)));
-            C = (float) ((point1.X - cx) * (point1.X - cx) + (point1.Y - cy) * (point1.Y - cy) - circleRadius * circleRadius);
+            a = dx * dx + dy * dy;
+            b = (float) (2 * (dx * (point1.X - cx) + dy * (point1.Y - cy)));
+            c = (float) ((point1.X - cx) * (point1.X - cx) + (point1.Y - cy) * (point1.Y - cy) - circleRadius * circleRadius);
 
-            det = B * B - 4 * A * C;
-            if ((A <= 0.0000001) || (det < 0))
+            det = b * b - 4 * a * c;
+            if ((a <= 0.0000001) || (det < 0))
             {
                 // No intersections.
                 return false;
