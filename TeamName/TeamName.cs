@@ -61,7 +61,7 @@ namespace TeamName
                     switch (player.PlayerType)
                     {
                         case PlayerType.Keeper:
-                            UpdateFreePlayers(myTeam, enemyTeam, player, 50);
+                            UpdateFreePlayers(myTeam, enemyTeam, player, 75);
 
                             if (_freeDefenders.Count > 0)
                             {
@@ -77,7 +77,7 @@ namespace TeamName
                             }
                             break;
                         case PlayerType.LeftDefender:
-                            UpdateFreePlayers(myTeam, enemyTeam, player, 50);
+                            UpdateFreePlayers(myTeam, enemyTeam, player, 100);
 
                             if (_freeForwards.Count > 0)
                             {
@@ -93,7 +93,7 @@ namespace TeamName
                             }
                             break;
                         case PlayerType.RightDefender:
-                            UpdateFreePlayers(myTeam, enemyTeam, player, 50);
+                            UpdateFreePlayers(myTeam, enemyTeam, player, 100);
 
                             if (_freeForwards.Count > 0)
                             {
@@ -121,20 +121,20 @@ namespace TeamName
                                 // Shoot at the side of the goal the enemy GK is furthest away from
                                 if (disTop >= disBot)
                                 {
-                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Top.Y - 20));
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Top.Y - 40));
                                 }
                                 else if (disBot >= disTop)
                                 {
-                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Bottom.Y + 20));
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Bottom.Y + 40));
                                 }
                                 else
                                 {
                                     player.ActionShootGoal();
                                 }
                             }
-                            else if (player.GetDistanceTo(closestEnemy) < 300)
+                            else if (player.GetDistanceTo(closestEnemy) < 100)
                             {
-                                UpdateFreePlayers(myTeam, enemyTeam, player, 50);
+                                UpdateFreePlayers(myTeam, enemyTeam, player, 75);
                                 if (_freeForwards.Count > 0)
                                 {
                                     player.ActionShoot(_freeForwards[_random.Next(_freeForwards.Count)], 8);
@@ -167,20 +167,20 @@ namespace TeamName
                                 // Shoot at the side of the goal the enemy GK is furthest away from
                                 if (disTop >= disBot)
                                 {
-                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Top.Y - 20));
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Top.Y - 40));
                                 }
                                 else if (disBot >= disTop)
                                 {
-                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Bottom.Y + 20));
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Bottom.Y + 40));
                                 }
                                 else
                                 {
                                     player.ActionShootGoal();
                                 }
                             }
-                            else if (player.GetDistanceTo(closestEnemy) < 300)
+                            else if (player.GetDistanceTo(closestEnemy) < 100)
                             {
-                                UpdateFreePlayers(myTeam, enemyTeam, player, 50);
+                                UpdateFreePlayers(myTeam, enemyTeam, player, 75);
                                 if (_freeForwards.Count > 0)
                                 {
                                     player.ActionShoot(_freeForwards[_random.Next(_freeForwards.Count)], 8);
@@ -212,20 +212,20 @@ namespace TeamName
                                 // Shoot at the side of the goal the enemy GK is furthest away from
                                 if (disTop >= disBot)
                                 {
-                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Top.Y - 20));
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Top.Y - 40));
                                 }
                                 else if (disBot >= disTop)
                                 {
-                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Bottom.Y + 20));
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Bottom.Y + 40));
                                 }
                                 else
                                 {
                                     player.ActionShootGoal();
                                 }
                             }
-                            else if (player.GetDistanceTo(closestEnemy) < 300)
+                            else if (player.GetDistanceTo(closestEnemy) < 100)
                             {
-                                UpdateFreePlayers(myTeam, enemyTeam, player, 50);
+                                UpdateFreePlayers(myTeam, enemyTeam, player, 75);
                                 if (_freeForwards.Count > 0)
                                 {
                                     player.ActionShoot(_freeForwards[_random.Next(_freeForwards.Count)], 8);
