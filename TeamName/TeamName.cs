@@ -121,11 +121,11 @@ namespace TeamName
                                 // Shoot at the side of the goal the enemy GK is furthest away from
                                 if (disTop >= disBot)
                                 {
-                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Top.Y - 40));
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Top.Y - 40), 8);
                                 }
                                 else if (disBot >= disTop)
                                 {
-                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Bottom.Y + 40));
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Bottom.Y + 40), 8);
                                 }
                                 else
                                 {
@@ -167,11 +167,11 @@ namespace TeamName
                                 // Shoot at the side of the goal the enemy GK is furthest away from
                                 if (disTop >= disBot)
                                 {
-                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Top.Y - 40));
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Top.Y - 40),8);
                                 }
                                 else if (disBot >= disTop)
                                 {
-                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Bottom.Y + 40));
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Bottom.Y + 40),8);
                                 }
                                 else
                                 {
@@ -212,11 +212,11 @@ namespace TeamName
                                 // Shoot at the side of the goal the enemy GK is furthest away from
                                 if (disTop >= disBot)
                                 {
-                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Top.Y - 40));
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Top.Y - 40),8);
                                 }
                                 else if (disBot >= disTop)
                                 {
-                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Bottom.Y + 40));
+                                    player.ActionShoot(new Vector(Field.EnemyGoal.Center.X, Field.EnemyGoal.Bottom.Y + 40),8);
                                 }
                                 else
                                 {
